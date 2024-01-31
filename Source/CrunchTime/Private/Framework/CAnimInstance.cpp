@@ -12,6 +12,7 @@ void UCAnimInstance::NativeInitializeAnimation()
 	if (OwnerCharacter)
 	{
 		OwnerMovemmentComp = OwnerCharacter->GetCharacterMovement();
+		PrevRot = OwnerCharacter->GetActorRotation();
 	}
 }
 
@@ -22,5 +23,15 @@ void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	{
 		Speed = OwnerCharacter->GetVelocity().Length();
 		bIsJumping = OwnerMovemmentComp->IsFalling();
+
+		FRotator characterRot = OwnerCharacter->GetActorRotation();
+		FRotator lookRot = OwnerCharacter->GetViewRotation();
+
+		LookOffset = (lookRot - characterRot).GetNormalized();
+	
+		FRotator RotDelta = (characterRot - PrevRot).GetNormalized();
+		PrevRot = characterRot;
+
+		YawSpeed = FMath::FInterpTo(YawSpeed, RotDelta.Yaw/DeltaSeconds, DeltaSeconds, 10.f);
 	}
 }

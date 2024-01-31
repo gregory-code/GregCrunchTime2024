@@ -31,6 +31,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool IsOnGround() const { return !bIsJumping; }
 
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	FRotator GetLookOffset() const { return LookOffset; }
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	float GetYawSpeed() const { return YawSpeed; }
 private:
 	// the below functions are the native overrides for each phase
 	// Native initialization override point BEGIN PLAY
@@ -45,4 +50,8 @@ private:
 
 	float Speed;
 	bool bIsJumping;
+	FRotator LookOffset;
+
+	FRotator PrevRot;
+	float YawSpeed;
 };
