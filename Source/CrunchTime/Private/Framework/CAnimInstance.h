@@ -18,10 +18,18 @@ class UCAnimInstance : public UAnimInstance
 public:
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta=(BlueprintThreadSafe))
 	float GetSpeed() const { return Speed;  }
+	
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool IsMoving() const { return Speed != 0; }
+
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool IsNotMoving() const { return Speed == 0; }
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool IsJumping() const { return bIsJumping;  }
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool IsOnGround() const { return !bIsJumping; }
 
 private:
 	// the below functions are the native overrides for each phase
@@ -36,4 +44,5 @@ private:
 	const UCharacterMovementComponent* OwnerMovemmentComp;
 
 	float Speed;
+	bool bIsJumping;
 };
