@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ACPlayerCharacter::ACPlayerCharacter()
 {
@@ -16,6 +17,12 @@ ACPlayerCharacter::ACPlayerCharacter()
 	viewCamera->SetupAttachment(cameraBoom, USpringArmComponent::SocketName);
 
 	cameraBoom->bUsePawnControlRotation = true;
+	cameraBoom->TargetArmLength = 800.f;
+	bUseControllerRotationYaw = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(1080.f);
+	GetCharacterMovement()->JumpZVelocity = 600.f;
 }
 
 void ACPlayerCharacter::PawnClientRestart()
@@ -39,6 +46,7 @@ void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	{
 		enhancedInputComp->BindAction(moveInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Move);
 		enhancedInputComp->BindAction(lookInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Look);
+		enhancedInputComp->BindAction(jumpInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Jump);
 	}
 }
 
