@@ -7,6 +7,9 @@
 #include "AbilitySystemInterface.h"
 #include "CCharacterBase.generated.h"
 
+class UCAbilitySystemComponent;
+class UCAttributeSet;
+
 UCLASS()
 class ACCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -32,5 +35,10 @@ public:
 	/*************************************************************/
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Gameplay Ability")
+	UCAbilitySystemComponent* AbilitySystemComponent;
 
+	UPROPERTY()
+	UCAttributeSet* AttributeSet;
 };
