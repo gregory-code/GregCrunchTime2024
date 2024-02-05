@@ -26,9 +26,11 @@ public:
 	ATTRIBUTE_ACCESSORS(UCAttributeSet, MaxHealth)
 
 private:
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	FGameplayAttributeData Health;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	FGameplayAttributeData MaxHealth;
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps) const override;
 };
