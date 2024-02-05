@@ -18,6 +18,16 @@ ACCharacterBase::ACCharacterBase()
 	AttributeSet = CreateDefaultSubobject<UCAttributeSet>("Attribute Set");
 }
 
+void ACCharacterBase::SetupAbilitySystemComponent()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
+void ACCharacterBase::InitAbilityAndAttributes()
+{
+	AbilitySystemComponent->ApplyInitialEffects();
+}
+
 // Called when the game starts or when spawned
 void ACCharacterBase::BeginPlay()
 {
