@@ -4,6 +4,8 @@
 #include "Character/CCharacterBase.h"
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
+#include "Widgets/StatusGuage.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 ACCharacterBase::ACCharacterBase()
@@ -16,6 +18,12 @@ ACCharacterBase::ACCharacterBase()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UCAttributeSet>("Attribute Set");
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &ACCharacterBase::HealthUpdated);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &ACCharacterBase::MaxHealthUpdated);
+	
+	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
+	StatusWidgetComp->SetupAttachment(GetRootComponent());
 }
 
 void ACCharacterBase::SetupAbilitySystemComponent()
@@ -52,5 +60,27 @@ void ACCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 UAbilitySystemComponent* ACCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ACCharacterBase::InitStatusHUD()
+{
+	StatusGuage = Cast<UStatusGuage>(StatusWidgetComp->GetUserWidgetObject());
+	if (!StatusGuage)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s can't spawn status guage hud, status widget component has the wrong widget setup"), *GetName());
+		return;
+	}
+}
+
+void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if(StatusGuage)
+		StatusGuage->SetHealth(ChangeData.NewValue, AttributeSet->GetMaxHealth());
+}
+
+void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if(StatusGuage)
+		StatusGuage->SetHealth(AttributeSet->GetHealth(), ChangeData.NewValue);
 }
 

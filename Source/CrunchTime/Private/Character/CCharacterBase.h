@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+
 #include "AbilitySystemInterface.h"
+#include "GameFramework/Character.h"
+#include "GameplayEffectTypes.h"
+
 #include "CCharacterBase.generated.h"
 
 class UCAbilitySystemComponent;
@@ -36,10 +39,20 @@ public:
 	/*************************************************************/
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	void InitStatusHUD();
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Gameplay Ability")
 	UCAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY()
 	UCAttributeSet* AttributeSet;
+
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* StatusWidgetComp;
+
+	UPROPERTY()
+	class UStatusGuage* StatusGuage;
+
+	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
+	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
 };
