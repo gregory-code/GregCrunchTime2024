@@ -23,6 +23,14 @@ public:
 private:
 	void PostPossessionSetup(APawn* NewPawn);
 
+	void SpawnGameplayUI();
+
 	UPROPERTY()
 	class ACPlayerCharacter* PlayerCharacter;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UGameplayUI> GameplayUIClass;
+
+	UPROPERTY()
+	UGameplayUI* GameplayUI;
 };
