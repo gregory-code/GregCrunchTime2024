@@ -15,7 +15,9 @@ class UCAbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 
 public:
-	void ApplyGameplayEffect(const TSubclassOf<UGameplayEffect>& EffectToApply, int Level = 1);
+	UFUNCTION(Server, Reliable, WithValidation) //this will singnal the server to call this function. Realiable means it will eventually called. UnRealiable means it could be dropped.
+	void ApplyGameplayEffect(TSubclassOf<UGameplayEffect> EffectToApply, int Level = 1);
+	
 	void ApplyInitialEffects();
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Init")
