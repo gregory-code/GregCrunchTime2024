@@ -18,8 +18,8 @@ public:
 	void SetMana(float NewMana, float MaxMana);
 
 private:
-	UPROPERTY(VisibleDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(meta=(BindWidget))
 	class UValueGuage* HealthBar;
-	UPROPERTY(VisibleDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(meta=(BindWidget))
 	class UValueGuage* ManaBar;
 };

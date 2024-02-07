@@ -14,4 +14,7 @@ class UGameplayUI : public UUserWidget
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(meta=(BindWidget))
+	class UStatusGuage* StatusGuage;
 };

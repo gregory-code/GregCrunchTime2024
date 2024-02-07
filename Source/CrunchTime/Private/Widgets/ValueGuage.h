@@ -20,7 +20,7 @@ public:
 	void SetValue(float NewVal, float NewMaxValue);
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	UPROPERTY(EditAnywhere, Category = "Visual")
 	FLinearColor FillColor;
 
 	UPROPERTY(VisibleDefaultsOnly, meta=(BindWidget))
