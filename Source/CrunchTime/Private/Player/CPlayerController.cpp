@@ -27,7 +27,10 @@ void ACPlayerController::PostPossessionSetup(APawn* NewPawn)
 
 	PlayerCharacter->SetupAbilitySystemComponent();
 	SpawnGameplayUI();
-	PlayerCharacter->InitAbilityAndAttributes();
+	if (IsLocalPlayerController())
+	{
+		PlayerCharacter->InitAbilityAndAttributes();
+	}
 }
 
 void ACPlayerController::SpawnGameplayUI()
