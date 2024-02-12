@@ -2,6 +2,7 @@
 
 
 #include "GameplayAbilities/GA_MeleeCombo.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 
 void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -11,6 +12,18 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 		EndAbility(Handle, ActorInfo, ActivationInfo,true,false);
 		return;
 	}
+
+	UAbilityTask_PlayMontageAndWait* PlayComboMotage
+		= UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(
+			this,
+			NAME_None,
+			ComboMontage);
+
+	PlayComboMotage->OnBlendOut.AddDynamic(this, &UGA_MeleeCombo::K2_EndAbility);
+	PlayComboMotage->OnInterrupted.AddDynamic(this, &UGA_MeleeCombo::K2_EndAbility);
+	PlayComboMotage->OnCancelled.AddDynamic(this, &UGA_MeleeCombo::K2_EndAbility);
+	PlayComboMotage->OnCompleted.AddDynamic(this, &UGA_MeleeCombo::K2_EndAbility);
+	PlayComboMotage->ReadyForActivation();
 
 	UE_LOG(LogTemp, Warning, TEXT("Casting Combo Ability"));
 }

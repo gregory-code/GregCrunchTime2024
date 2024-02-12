@@ -5,6 +5,11 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+bool UCAnimInstance::ShouldDoUpperBody() const
+{
+	return IsMoving() || IsJumping();
+}
+
 void UCAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();

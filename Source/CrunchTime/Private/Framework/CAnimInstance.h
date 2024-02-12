@@ -36,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	float GetYawSpeed() const { return YawSpeed; }
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool ShouldDoUpperBody() const;
 private:
 	// the below functions are the native overrides for each phase
 	// Native initialization override point BEGIN PLAY
