@@ -76,6 +76,12 @@ void ACCharacterBase::InitStatusHUD()
 	StatusGuage->SetRenderScale(FVector2D{0.5f});
 
 	StatusGuage->SetHealth(AttributeSet->GetHealth(), AttributeSet->GetMaxHealth());
+
+	if (IsLocallyControlled())
+	{
+		if(GetController() && GetController()->IsPlayerController())
+			StatusGuage->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
