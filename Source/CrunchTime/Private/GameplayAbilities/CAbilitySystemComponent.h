@@ -19,7 +19,11 @@ public:
 	void ApplyGameplayEffect(TSubclassOf<UGameplayEffect> EffectToApply, int Level = 1);
 	
 	void ApplyInitialEffects();
+	void GrantInitialAbilities();
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Init")
 	TArray<TSubclassOf<UGameplayEffect>> InitialEffects;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Init")
+	TArray<TSubclassOf<class UGA_AbilityBase>> GenericAbilities;
 };

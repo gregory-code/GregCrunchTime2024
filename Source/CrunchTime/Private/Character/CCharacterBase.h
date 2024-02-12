@@ -23,6 +23,7 @@ public:
 	ACCharacterBase();
 	void SetupAbilitySystemComponent();
 	void InitAbilityAndAttributes();
+	void InitAbilities();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

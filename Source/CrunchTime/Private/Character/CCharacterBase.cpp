@@ -31,9 +31,14 @@ void ACCharacterBase::SetupAbilitySystemComponent()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
-void ACCharacterBase::InitAbilityAndAttributes()
+void ACCharacterBase::InitAttributes()
 {
 	AbilitySystemComponent->ApplyInitialEffects();
+}
+
+void ACCharacterBase::InitAbilities()
+{
+	AbilitySystemComponent->GrantInitialAbilities();
 }
 
 // Called when the game starts or when spawned
