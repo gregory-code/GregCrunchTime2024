@@ -4,6 +4,12 @@
 #include "GameplayAbilities/GA_MeleeCombo.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 
+UGA_MeleeCombo::UGA_MeleeCombo()
+{
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
+}
+
 void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);

@@ -19,6 +19,11 @@ void UCAnimInstance::NativeInitializeAnimation()
 		OwnerMovemmentComp = OwnerCharacter->GetCharacterMovement();
 		PrevRot = OwnerCharacter->GetActorRotation();
 	}
+
+	if (StartMontage)
+	{
+		Montage_Play(StartMontage);
+	}
 }
 
 void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
