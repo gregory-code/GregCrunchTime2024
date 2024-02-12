@@ -17,5 +17,7 @@ void UCAbilitySystemComponent::ApplyInitialEffects()
 	for (const TSubclassOf<UGameplayEffect>& Effect : InitialEffects)
 	{
 		ApplyGameplayEffect(Effect, 1);
+
+
 	}
 }

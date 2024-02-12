@@ -50,8 +50,7 @@ void ACPlayerController::SpawnGameplayUI()
 	{
 		return;
 	}
-	PlayerCharacter->InitStatusHUD();
-
+	
 	GameplayUI = CreateWidget<UGameplayUI>(this, GameplayUIClass);
 	if (GameplayUI)
 	{
