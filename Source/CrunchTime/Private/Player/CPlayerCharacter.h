@@ -59,6 +59,7 @@ private:
 
 	UFUNCTION()
 	void DoBasicAttack();
+
 	FVector GetMoveFwdDir() const;
 	FVector GetMoveRightDir() const;
 };

@@ -14,9 +14,14 @@ class UGA_MeleeCombo : public UGA_AbilityBase
 {
 public:
 	UGA_MeleeCombo();
+	static FGameplayTag GetComboChangeTag();
+	
 private:
 	GENERATED_BODY()
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	UAnimMontage* ComboMontage;
+
+	UFUNCTION()
+	void HandleComboEvent(FGameplayEventData Payload);
 };
