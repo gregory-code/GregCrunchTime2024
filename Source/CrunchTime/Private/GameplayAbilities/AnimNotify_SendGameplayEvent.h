@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
+#include "GameplayTagContainer.h"
 #include "AnimNotify_SendGameplayEvent.generated.h"
 
 /**
@@ -17,4 +18,6 @@ class UAnimNotify_SendGameplayEvent : public UAnimNotify
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay Ability")
 	FGameplayTag EventTag;
+
+	virtual FString GetNotifyName_Implementation() const override;
 };

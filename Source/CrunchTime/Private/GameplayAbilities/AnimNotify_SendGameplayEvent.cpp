@@ -2,9 +2,10 @@
 
 
 #include "GameplayAbilities/AnimNotify_SendGameplayEvent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayTagsManager.h"
 
 void UAnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
@@ -16,4 +17,18 @@ void UAnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, UAn
 	if (!OwnerASC) return;
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(), EventTag, FGameplayEventData());
+}
+
+FString UAnimNotify_SendGameplayEvent::GetNotifyName_Implementation() const
+{
+	if (EventTag.IsValid())
+	{
+		TArray<FName> TagNames;
+		UGameplayTagsManager::Get().SplitGameplayTagFName(EventTag, TagNames);
+		if (TagNames.Num() > 0)
+		{
+			return TagNames.Last().ToString();
+		}
+	}
+	return FString("None");
 }
