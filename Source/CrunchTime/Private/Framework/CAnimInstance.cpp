@@ -23,6 +23,7 @@ void UCAnimInstance::NativeInitializeAnimation()
 	if (StartMontage)
 	{
 		Montage_Play(StartMontage);
+
 	}
 }
 
@@ -43,5 +44,8 @@ void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 		PrevRot = characterRot;
 
 		YawSpeed = FMath::FInterpTo(YawSpeed, RotDelta.Yaw/DeltaSeconds, DeltaSeconds, 10.f);
+
+
+
 	}
 }

@@ -25,8 +25,8 @@ void UCAbilitySystemComponent::ApplyInitialEffects()
 
 void UCAbilitySystemComponent::GrantInitialAbilities()
 {
-	for (const TSubclassOf<UGA_AbilityBase>& AbilityClass : GenericAbilities)
+	for (const TPair<EAbilityInputID, TSubclassOf<UGA_AbilityBase>>& AbilityPair : GenericAbilities)
 	{
-		GiveAbility(FGameplayAbilitySpec{AbilityClass, 1, -1, GetOwner()});
+		GiveAbility(FGameplayAbilitySpec{AbilityPair.Value, 1, (int)AbilityPair.Key, GetOwner()});
 	}
 }
