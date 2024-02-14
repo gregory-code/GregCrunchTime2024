@@ -39,6 +39,7 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 
 	UAbilityTask_WaitGameplayEvent* WaitComboEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, GetComboChangeTag(), nullptr, false, false);
 	WaitComboEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleComboEvent);
+	WaitComboEvent->ReadyForActivation();
 }
 
 void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
