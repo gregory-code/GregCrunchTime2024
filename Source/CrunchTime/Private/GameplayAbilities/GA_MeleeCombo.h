@@ -29,6 +29,8 @@ private:
 	void TryCommitCombo(float TimeWaited);
 
 	FName NextComboName;
+	
+	bool bComboCommitted;
 
 	void SetupWaitInputTask();
 };

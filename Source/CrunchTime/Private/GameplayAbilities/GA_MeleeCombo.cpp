@@ -58,6 +58,7 @@ void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 	if (ComboTag == FGameplayTag::RequestGameplayTag("ability.combo.change.end"))
 	{
 		NextComboName = NAME_None;
+		bComboCommitted = false;
 		return;
 	}
 
@@ -69,6 +70,9 @@ void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)
 {
 	SetupWaitInputTask();
+
+	if (bComboCommitted)
+		return;
 
 	if (NextComboName == NAME_None)
 	{
@@ -84,6 +88,7 @@ void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)
 		return;
 
 	OwnerAnimInst->Montage_SetNextSection(OwnerAnimInst->Montage_GetCurrentSection(ComboMontage), NextComboName, ComboMontage);
+	bComboCommitted = true;
 }
 
 void UGA_MeleeCombo::SetupWaitInputTask()
