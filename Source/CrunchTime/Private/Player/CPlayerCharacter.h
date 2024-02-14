@@ -46,6 +46,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* jumpInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* baiscAttackAction;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
@@ -54,6 +57,8 @@ private:
 	UFUNCTION()
 	void Look(const FInputActionValue& InputValue);
 
+	UFUNCTION()
+	void DoBasicAttack();
 	FVector GetMoveFwdDir() const;
 	FVector GetMoveRightDir() const;
 };
