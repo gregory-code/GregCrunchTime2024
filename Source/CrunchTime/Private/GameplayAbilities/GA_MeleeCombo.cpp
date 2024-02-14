@@ -2,8 +2,16 @@
 
 
 #include "GameplayAbilities/GA_MeleeCombo.h"
+
+#include "Animation/AnimInstance.h"
+
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
+
+#include "Components/SkeletalMeshComponent.h"
+
+#include "GameplayTagsManager.h"
 
 UGA_MeleeCombo::UGA_MeleeCombo()
 {
@@ -40,9 +48,47 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 	UAbilityTask_WaitGameplayEvent* WaitComboEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, GetComboChangeTag(), nullptr, false, false);
 	WaitComboEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleComboEvent);
 	WaitComboEvent->ReadyForActivation();
+
+	SetupWaitInputTask();
 }
 
 void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Handing Event With Tag: %s"), *Payload.EventTag.ToString());
+	FGameplayTag ComboTag = Payload.EventTag;
+	if (ComboTag == FGameplayTag::RequestGameplayTag("ability.combo.change.end"))
+	{
+		NextComboName = NAME_None;
+		return;
+	}
+
+	TArray<FName> ComboNames;
+	UGameplayTagsManager::Get().SplitGameplayTagFName(ComboTag, ComboNames);	
+	NextComboName = ComboNames.Last();
+}
+
+void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)
+{
+	SetupWaitInputTask();
+
+	if (NextComboName == NAME_None)
+	{
+		return;
+	}
+
+	USkeletalMeshComponent* OwnerMesh = GetOwningComponentFromActorInfo();
+	if (!OwnerMesh)
+		return;
+
+	UAnimInstance* OwnerAnimInst = OwnerMesh->GetAnimInstance();
+	if (!OwnerAnimInst)
+		return;
+
+	OwnerAnimInst->Montage_SetNextSection(OwnerAnimInst->Montage_GetCurrentSection(ComboMontage), NextComboName, ComboMontage);
+}
+
+void UGA_MeleeCombo::SetupWaitInputTask()
+{
+	UAbilityTask_WaitInputPress* WaitInputPress = UAbilityTask_WaitInputPress::WaitInputPress(this);
+	WaitInputPress->OnPress.AddDynamic(this, &UGA_MeleeCombo::TryCommitCombo);
+	WaitInputPress->ReadyForActivation();
 }

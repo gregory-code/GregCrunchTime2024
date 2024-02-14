@@ -24,4 +24,11 @@ private:
 
 	UFUNCTION()
 	void HandleComboEvent(FGameplayEventData Payload);
+
+	UFUNCTION()
+	void TryCommitCombo(float TimeWaited);
+
+	FName NextComboName;
+
+	void SetupWaitInputTask();
 };
