@@ -6,7 +6,6 @@
 #include "GameplayAbilities/CAttributeSet.h"
 #include "Widgets/StatusGuage.h"
 #include "Components/WidgetComponent.h"
-#include "Targeting/CapsuleTaregetingComponent.h"
 
 // Sets default values
 ACCharacterBase::ACCharacterBase()
@@ -25,14 +24,6 @@ ACCharacterBase::ACCharacterBase()
 	
 	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
 	StatusWidgetComp->SetupAttachment(GetRootComponent());
-
-	CapsuleTargettingComponent = CreateDefaultSubobject<UCapsuleTaregetingComponent>("Capsule Targetting Component");
-	CapsuleTargettingComponent->SetupAttachment(GetMesh(), FName("hand_l"));
-	CapsuleTargettingComponent->SetUseCCD(true);
-	GetCapsuleComponent()->SetUseCCD(true);
-
-	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ACCharacterBase::SetupAbilitySystemComponent()

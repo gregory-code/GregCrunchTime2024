@@ -13,8 +13,6 @@
 
 #include "GameplayTagsManager.h"
 
-#include "Targeting/CapsuleTaregetingComponent.h"
-
 UGA_MeleeCombo::UGA_MeleeCombo()
 {
 	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
@@ -51,9 +49,6 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 	WaitComboEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleComboEvent);
 	WaitComboEvent->ReadyForActivation();
 
-	UAbilityTask_WaitGameplayEvent* WaitDamageEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCapsuleTaregetingComponent::GetTargetAquiredEventTag());
-	WaitDamageEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleDamageEvent);
-	WaitDamageEvent->ReadyForActivation();
 	SetupWaitInputTask();
 }
 
@@ -70,32 +65,6 @@ void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 	TArray<FName> ComboNames;
 	UGameplayTagsManager::Get().SplitGameplayTagFName(ComboTag, ComboNames);	
 	NextComboName = ComboNames.Last();
-}
-
-void UGA_MeleeCombo::HandleDamageEvent(FGameplayEventData Payload)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Event Received"));
-	if (K2_HasAuthority())
-	{
-		USkeletalMeshComponent* OwnerMesh = GetOwningComponentFromActorInfo();
-		if (!OwnerMesh)
-			return;
-
-		UAnimInstance* OwnerAnimInst = OwnerMesh->GetAnimInstance();
-		if (!OwnerAnimInst)
-			return;
-
-		TSubclassOf<UGameplayEffect> DamageEffect = GetDamageEffectForCombo(OwnerAnimInst->Montage_GetCurrentSection(ComboMontage));
-
-		FGameplayEffectSpecHandle Spec = MakeOutgoingGameplayEffectSpec(DamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
-		ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, Spec, Payload.TargetData);
-	
-		const FHitResult* HitResult = Payload.ContextHandle.GetHitResult();
-		if (HitResult)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Hit Result Is: %s"), *HitResult->ImpactPoint.ToString());
-		}
-	}
 }
 
 void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)
@@ -127,15 +96,4 @@ void UGA_MeleeCombo::SetupWaitInputTask()
 	UAbilityTask_WaitInputPress* WaitInputPress = UAbilityTask_WaitInputPress::WaitInputPress(this);
 	WaitInputPress->OnPress.AddDynamic(this, &UGA_MeleeCombo::TryCommitCombo);
 	WaitInputPress->ReadyForActivation();
-}
-
-TSubclassOf<UGameplayEffect> UGA_MeleeCombo::GetDamageEffectForCombo(FName ComboName) const
-{
-	const TSubclassOf<UGameplayEffect>* EffectFound = DamageEffectMap.Find(ComboName);
-	if (EffectFound)
-	{
-		return *EffectFound;
-	}
-
-	return DefaultDamageEffect;
 }

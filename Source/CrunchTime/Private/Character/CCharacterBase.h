@@ -35,11 +35,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Targetting")
-	class UCapsuleTaregetingComponent* CapsuleTargettingComponent;
-
-
 	/*************************************************************/
 	/*                              Gameplay Ability                                  */
 	/*************************************************************/
@@ -53,20 +48,12 @@ private:
 	UPROPERTY()
 	UCAttributeSet* AttributeSet;
 
-	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
-	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
-
-
-	/*************************************************************/
-	/*                              UI                            */
-	/*************************************************************/
-private:
-
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* StatusWidgetComp;
 
 	UPROPERTY()
 	class UStatusGuage* StatusGuage;
 
-
+	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
+	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
 };
