@@ -22,7 +22,8 @@ public:
 	// Sets default values for this character's properties
 	ACCharacterBase();
 	void SetupAbilitySystemComponent();
-	void InitAbilityAndAttributes();
+	void InitAttributes();
+	void InitAbilities();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

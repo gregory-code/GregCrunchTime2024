@@ -31,16 +31,21 @@ void ACCharacterBase::SetupAbilitySystemComponent()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
-void ACCharacterBase::InitAbilityAndAttributes()
+void ACCharacterBase::InitAttributes()
 {
 	AbilitySystemComponent->ApplyInitialEffects();
+}
+
+void ACCharacterBase::InitAbilities()
+{
+	AbilitySystemComponent->GrantInitialAbilities();
 }
 
 // Called when the game starts or when spawned
 void ACCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	InitStatusHUD();
 }
 
 // Called every frame
@@ -74,6 +79,14 @@ void ACCharacterBase::InitStatusHUD()
 	}
 
 	StatusGuage->SetRenderScale(FVector2D{0.5f});
+
+	StatusGuage->SetHealth(AttributeSet->GetHealth(), AttributeSet->GetMaxHealth());
+
+	if (IsLocallyControlled())
+	{
+		if(GetController() && GetController()->IsPlayerController())
+			StatusGuage->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)

@@ -2,11 +2,16 @@
 
 
 #include "Player/CPlayerCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
+
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameplayAbilities/CAbilitySystemTypes.h"
 
 ACPlayerCharacter::ACPlayerCharacter()
 {
@@ -47,6 +52,7 @@ void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComp->BindAction(moveInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Move);
 		enhancedInputComp->BindAction(lookInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Look);
 		enhancedInputComp->BindAction(jumpInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Jump);
+		enhancedInputComp->BindAction(baiscAttackAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::DoBasicAttack);
 	}
 }
 
@@ -63,6 +69,11 @@ void ACPlayerCharacter::Look(const FInputActionValue& InputValue)
 	FVector2D input = InputValue.Get<FVector2D>();
 	AddControllerYawInput(input.X);
 	AddControllerPitchInput(-input.Y);
+}
+
+void ACPlayerCharacter::DoBasicAttack()
+{
+	GetAbilitySystemComponent()->PressInputID((int)EAbilityInputID::BasicAttack);
 }
 
 FVector ACPlayerCharacter::GetMoveFwdDir() const

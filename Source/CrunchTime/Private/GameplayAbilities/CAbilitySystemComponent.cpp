@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "GameplayAbilities/CAbilitySystemComponent.h"
+#include "GameplayAbilities/GA_AbilityBase.h"
 
 void UCAbilitySystemComponent::ApplyGameplayEffect_Implementation(TSubclassOf<UGameplayEffect> EffectToApply, int Level)
 {
@@ -19,5 +20,13 @@ void UCAbilitySystemComponent::ApplyInitialEffects()
 		ApplyGameplayEffect(Effect, 1);
 
 
+	}
+}
+
+void UCAbilitySystemComponent::GrantInitialAbilities()
+{
+	for (const TPair<EAbilityInputID, TSubclassOf<UGA_AbilityBase>>& AbilityPair : GenericAbilities)
+	{
+		GiveAbility(FGameplayAbilitySpec{AbilityPair.Value, 1, (int)AbilityPair.Key, GetOwner()});
 	}
 }

@@ -16,6 +16,7 @@ class UCAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 public:
+
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta=(BlueprintThreadSafe))
 	float GetSpeed() const { return Speed;  }
 	
@@ -36,7 +37,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	float GetYawSpeed() const { return YawSpeed; }
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool ShouldDoUpperBody() const;
 private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* StartMontage;
+
 	// the below functions are the native overrides for each phase
 	// Native initialization override point BEGIN PLAY
 	virtual void NativeInitializeAnimation() override;

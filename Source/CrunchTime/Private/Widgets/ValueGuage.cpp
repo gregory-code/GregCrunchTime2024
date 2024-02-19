@@ -15,7 +15,7 @@ void UValueGuage::SetValue(float NewVal, float NewMaxValue)
 {
 	if (NewMaxValue == 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Value Guage: %s is geting a max value of 0, cannot calcuate percent for progress bar"), *GetName());
+		//UE_LOG(LogTemp, Error, TEXT("Value Guage: %s is geting a max value of 0, cannot calcuate percent for progress bar"), *GetName());
 		return;
 	}
 

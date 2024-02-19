@@ -8,6 +8,10 @@ void ACPlayerController::OnPossess(APawn* NewPawn)
 {
 	Super::OnPossess(NewPawn);
 	PostPossessionSetup(NewPawn);
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->InitAbilities();
+	}
 }
 
 void ACPlayerController::AcknowledgePossession(APawn* NewPawn)
@@ -29,7 +33,7 @@ void ACPlayerController::PostPossessionSetup(APawn* NewPawn)
 	SpawnGameplayUI();
 	if (IsLocalPlayerController())
 	{
-		PlayerCharacter->InitAbilityAndAttributes();
+		PlayerCharacter->InitAttributes();
 	}
 }
 
@@ -50,8 +54,7 @@ void ACPlayerController::SpawnGameplayUI()
 	{
 		return;
 	}
-	PlayerCharacter->InitStatusHUD();
-
+	
 	GameplayUI = CreateWidget<UGameplayUI>(this, GameplayUIClass);
 	if (GameplayUI)
 	{

@@ -5,6 +5,11 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+bool UCAnimInstance::ShouldDoUpperBody() const
+{
+	return IsMoving() || IsJumping();
+}
+
 void UCAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
@@ -13,6 +18,12 @@ void UCAnimInstance::NativeInitializeAnimation()
 	{
 		OwnerMovemmentComp = OwnerCharacter->GetCharacterMovement();
 		PrevRot = OwnerCharacter->GetActorRotation();
+	}
+
+	if (StartMontage)
+	{
+		Montage_Play(StartMontage);
+
 	}
 }
 
@@ -33,5 +44,8 @@ void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 		PrevRot = characterRot;
 
 		YawSpeed = FMath::FInterpTo(YawSpeed, RotDelta.Yaw/DeltaSeconds, DeltaSeconds, 10.f);
+
+
+
 	}
 }
