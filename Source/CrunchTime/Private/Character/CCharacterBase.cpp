@@ -2,11 +2,15 @@
 
 
 #include "Character/CCharacterBase.h"
+
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
-#include "Widgets/StatusGuage.h"
+
+#include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 
+#include "Widgets/StatusGuage.h"
 // Sets default values
 ACCharacterBase::ACCharacterBase()
 {
@@ -24,6 +28,9 @@ ACCharacterBase::ACCharacterBase()
 	
 	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
 	StatusWidgetComp->SetupAttachment(GetRootComponent());
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,  ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ACCharacterBase::SetupAbilitySystemComponent()

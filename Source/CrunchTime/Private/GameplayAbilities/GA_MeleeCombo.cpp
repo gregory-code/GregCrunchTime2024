@@ -65,6 +65,8 @@ void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 	TArray<FName> ComboNames;
 	UGameplayTagsManager::Get().SplitGameplayTagFName(ComboTag, ComboNames);	
 	NextComboName = ComboNames.Last();
+
+
 }
 
 void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)
