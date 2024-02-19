@@ -68,8 +68,12 @@ void ACCharacterBase::InitStatusHUD()
 	if (!StatusGuage)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s can't spawn status guage hud, status widget component has the wrong widget setup"), *GetName());
+
+
 		return;
 	}
+
+	StatusGuage->SetRenderScale(FVector2D{0.5f});
 }
 
 void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
