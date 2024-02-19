@@ -10,7 +10,10 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 
+#include "Targeting/TargetingBoxComponent.h"
+
 #include "Widgets/StatusGuage.h"
+
 // Sets default values
 ACCharacterBase::ACCharacterBase()
 {
@@ -31,6 +34,9 @@ ACCharacterBase::ACCharacterBase()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,  ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+
+	TargetingBoxComponent = CreateDefaultSubobject<UTargetingBoxComponent>("Targeting Box Component");
+	TargetingBoxComponent->SetupAttachment(GetMesh());
 }
 
 void ACCharacterBase::SetupAbilitySystemComponent()

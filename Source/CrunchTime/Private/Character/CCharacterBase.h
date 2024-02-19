@@ -34,6 +34,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	class UTargetingBoxComponent* TargetingBoxComponent;
 
 	/*************************************************************/
 	/*                              Gameplay Ability                                  */
@@ -56,4 +59,6 @@ private:
 
 	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
+
+
 };

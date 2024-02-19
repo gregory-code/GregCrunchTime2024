@@ -14,7 +14,7 @@ void UTargetingBoxComponent::DoTargetCheck()
 	TArray<FOverlapResult> OutResult;
 	FCollisionShape DetecteionShape;
 	const FVector Extend = GetScaledBoxExtent();
-	DetecteionShape.SetBox(FVector3f{Extend.X, Extend.Y, Extend.Z});
+	DetecteionShape.SetBox(FVector3f{(float)Extend.X, (float)Extend.Y, (float)Extend.Z});
 
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(GetOwner());
