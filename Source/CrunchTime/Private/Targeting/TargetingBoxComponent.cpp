@@ -2,6 +2,8 @@
 
 
 #include "Targeting/TargetingBoxComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayAbilities/CAbilityGenericTags.h"
 
 void UTargetingBoxComponent::StartDetection()
 {
@@ -11,6 +13,11 @@ void UTargetingBoxComponent::StartDetection()
 
 void UTargetingBoxComponent::DoTargetCheck()
 {
+	if (!GetOwner()->HasAuthority())
+	{
+		return;
+	}
+
 	TArray<FOverlapResult> OutResult;
 	FCollisionShape DetecteionShape;
 	const FVector Extend = GetScaledBoxExtent();
@@ -28,7 +35,13 @@ void UTargetingBoxComponent::DoTargetCheck()
 	{
 		for (const FOverlapResult& result : OutResult)
 		{
-			const AActor* OverlappedActor = result.GetActor();
+			AActor* OverlappedActor = result.GetActor();
+			
+			if (OverlappedActor == GetOwner())
+			{
+				continue;
+			}
+
 			if (AlreadyDetectedActors.Contains(OverlappedActor))
 			{
 				continue;
@@ -38,6 +51,8 @@ void UTargetingBoxComponent::DoTargetCheck()
 			TargetFound(OverlappedActor);
 		}
 	}
+
+	//DrawDebugBox(GetWorld(), GetComponentLocation(), GetScaledBoxExtent(), FColor::Red, false, 1.f);
 }
 
 void UTargetingBoxComponent::EndDetection()
@@ -46,7 +61,9 @@ void UTargetingBoxComponent::EndDetection()
 	AlreadyDetectedActors.Empty();
 }
 
-void UTargetingBoxComponent::TargetFound(const AActor* OverlappedActor)
+void UTargetingBoxComponent::TargetFound(AActor* OverlappedActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Found Target: %s"), *OverlappedActor->GetName());
+	FGameplayEventData Data;
+	Data.TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(OverlappedActor);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), UCAbilityGenericTags::GetGenericTargetAquiredTag(), Data);
 }

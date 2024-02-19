@@ -2,12 +2,14 @@
 
 
 #include "GameplayAbilities/GA_MeleeCombo.h"
+#include "GameplayAbilities/CAbilityGenericTags.h"
 
 #include "Animation/AnimInstance.h"
 
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 #include "Components/SkeletalMeshComponent.h"
 
@@ -49,6 +51,10 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 	WaitComboEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleComboEvent);
 	WaitComboEvent->ReadyForActivation();
 
+	UAbilityTask_WaitGameplayEvent* WaitTargetAquiredEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCAbilityGenericTags::GetGenericTargetAquiredTag());
+	WaitTargetAquiredEvent->EventReceived.AddDynamic(this, &UGA_MeleeCombo::HandleDamage);
+	WaitTargetAquiredEvent->ReadyForActivation();
+
 	SetupWaitInputTask();
 }
 
@@ -65,8 +71,35 @@ void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
 	TArray<FName> ComboNames;
 	UGameplayTagsManager::Get().SplitGameplayTagFName(ComboTag, ComboNames);	
 	NextComboName = ComboNames.Last();
+}
 
+void UGA_MeleeCombo::HandleDamage(FGameplayEventData Payload)
+{
+	if (K2_HasAuthority())
+	{
+		FGameplayEffectSpecHandle EffectSpec = MakeOutgoingGameplayEffectSpec(GetDamageEffectForCurrentCombo(), GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+		ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo,  EffectSpec, Payload.TargetData);
+	}
+}
 
+const TSubclassOf<UGameplayEffect> UGA_MeleeCombo::GetDamageEffectForCurrentCombo() const
+{
+	const USkeletalMeshComponent* OwnerMesh = GetOwningComponentFromActorInfo();
+	if (!OwnerMesh)
+		return TSubclassOf<UGameplayEffect>();
+
+	const UAnimInstance* OwnerAnimInst = OwnerMesh->GetAnimInstance();
+	if (!OwnerAnimInst)
+		return TSubclassOf<UGameplayEffect>();
+
+	const FName SectionName = OwnerAnimInst->Montage_GetCurrentSection(ComboMontage);
+
+	const TSubclassOf<UGameplayEffect>* FoundEffect = ComboDamageEffectMap.Find(SectionName);
+	if (FoundEffect)
+	{
+		return *FoundEffect;
+	}
+	return TSubclassOf<UGameplayEffect>();
 }
 
 void UGA_MeleeCombo::TryCommitCombo(float TimeWaited)

@@ -21,5 +21,5 @@ private:
 	//Set internally uses hash-table, meaning it has O(1) search time complicty
 	TSet<const AActor*> AlreadyDetectedActors;
 
-	void TargetFound(const AActor* OverlappedActor);
+	void TargetFound(AActor* OverlappedActor);
 };

@@ -23,7 +23,15 @@ private:
 	UAnimMontage* ComboMontage;
 
 	UFUNCTION()
-	void HandleComboEvent(FGameplayEventData Payload);
+	void HandleComboEvent(FGameplayEventData Payload);	
+	
+	UFUNCTION()
+	void HandleDamage(FGameplayEventData Payload);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	TMap<FName, TSubclassOf<class UGameplayEffect>> ComboDamageEffectMap;
+
+	const TSubclassOf<UGameplayEffect> GetDamageEffectForCurrentCombo() const;
 
 	UFUNCTION()
 	void TryCommitCombo(float TimeWaited);
