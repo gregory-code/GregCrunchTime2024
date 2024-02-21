@@ -5,6 +5,7 @@
 
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
+#include "GameplayAbilities/CAbilityGenericTags.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -75,6 +76,17 @@ void ACCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
+void ACCharacterBase::PlayMontage(UAnimMontage* MontageToPlay)
+{
+	if (MontageToPlay)
+	{
+		if (GetMesh()->GetAnimInstance())
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(MontageToPlay);
+		}
+	}
+}
+
 UAbilitySystemComponent* ACCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -106,6 +118,23 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if(StatusGuage)
 		StatusGuage->SetHealth(ChangeData.NewValue, AttributeSet->GetMaxHealth());
+
+	if (HasAuthority())
+	{
+		if (ChangeData.NewValue >= AttributeSet->GetMaxHealth())
+		{
+			AbilitySystemComponent->AddLooseGameplayTag(UCAbilityGenericTags::GetFullHealthTag());
+		}
+		else
+		{
+			AbilitySystemComponent->RemoveLooseGameplayTag(UCAbilityGenericTags::GetFullHealthTag());
+		}
+	}
+
+	if (ChangeData.NewValue <= 0)
+	{
+		StartDeath();
+	}
 }
 
 void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
@@ -116,12 +145,12 @@ void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
 
 void ACCharacterBase::PlayHitReaction()
 {
-	if (HitReactionMontage)
-	{
-		if (GetMesh()->GetAnimInstance())
-		{
-			GetMesh()->GetAnimInstance()->Montage_Play(HitReactionMontage);
-		}
-	}
+	PlayMontage(HitReactionMontage);
+}
+
+void ACCharacterBase::StartDeath()
+{
+	PlayMontage(DeathMontage);
+	AbilitySystemComponent->ApplyGameplayEffect(DeathEffect);
 }
 

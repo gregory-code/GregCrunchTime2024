@@ -13,6 +13,7 @@
 
 class UCAbilitySystemComponent;
 class UCAttributeSet;
+class UGameplayEffect;
 
 UCLASS()
 class ACCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICGameplayCueInterface
@@ -38,6 +39,8 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	class UTargetingBoxComponent* TargetingBoxComponent;
+
+	void PlayMontage(UAnimMontage* MontageToPlay);
 
 	/*************************************************************/
 	/*                              Gameplay Ability                                  */
@@ -69,4 +72,14 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
 	UAnimMontage* HitReactionMontage;
+
+	/*************************************************************/
+	/*                                      Death                                      */
+	/*************************************************************/
+private:
+	void StartDeath();
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	UAnimMontage* DeathMontage;
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	TSubclassOf<UGameplayEffect> DeathEffect;
 };
