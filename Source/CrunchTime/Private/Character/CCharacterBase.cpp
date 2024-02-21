@@ -3,6 +3,8 @@
 
 #include "Character/CCharacterBase.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
 #include "GameplayAbilities/CAbilityGenericTags.h"
@@ -12,7 +14,6 @@
 #include "Components/WidgetComponent.h"
 
 #include "Targeting/TargetingBoxComponent.h"
-
 #include "Widgets/StatusGuage.h"
 
 // Sets default values
@@ -29,7 +30,8 @@ ACCharacterBase::ACCharacterBase()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &ACCharacterBase::HealthUpdated);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &ACCharacterBase::MaxHealthUpdated);
-	
+	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetDeadTag()).AddUObject(this, &ACCharacterBase::DeathTagChanged);
+
 	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
 	StatusWidgetComp->SetupAttachment(GetRootComponent());
 
@@ -152,5 +154,16 @@ void ACCharacterBase::StartDeath()
 {
 	PlayMontage(DeathMontage);
 	AbilitySystemComponent->ApplyGameplayEffect(DeathEffect);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+}
+
+void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
+{
+	if (NewStackCount == 0)
+	{
+		StopAnimMontage(DeathMontage);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		AbilitySystemComponent->ApplyFullStat();
+	}
 }
 

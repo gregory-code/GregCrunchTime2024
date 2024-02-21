@@ -78,6 +78,9 @@ private:
 	/*************************************************************/
 private:
 	void StartDeath();
+	
+	void DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Death")
 	UAnimMontage* DeathMontage;
 	UPROPERTY(EditDefaultsOnly, Category = "Death")
