@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "GameplayEffectTypes.h"
+#include "GameplayAbilities/CGameplayCueInterface.h"
 
 #include "CCharacterBase.generated.h"
 
@@ -14,7 +15,7 @@ class UCAbilitySystemComponent;
 class UCAttributeSet;
 
 UCLASS()
-class ACCharacterBase : public ACharacter, public IAbilitySystemInterface
+class ACCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICGameplayCueInterface
 {
 	GENERATED_BODY()
 
@@ -60,5 +61,12 @@ private:
 	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
 
-
+	/*************************************************************/
+	/*                              Gameplay Cue                                   */
+	/*************************************************************/
+public:
+	virtual void PlayHitReaction() override;
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
+	UAnimMontage* HitReactionMontage;
 };

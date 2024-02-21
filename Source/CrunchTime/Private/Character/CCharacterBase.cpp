@@ -114,3 +114,14 @@ void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
 		StatusGuage->SetHealth(AttributeSet->GetHealth(), ChangeData.NewValue);
 }
 
+void ACCharacterBase::PlayHitReaction()
+{
+	if (HitReactionMontage)
+	{
+		if (GetMesh()->GetAnimInstance())
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(HitReactionMontage);
+		}
+	}
+}
+
