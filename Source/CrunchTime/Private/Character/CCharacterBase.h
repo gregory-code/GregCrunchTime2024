@@ -99,4 +99,7 @@ private:
 	FGenericTeamId TeamId;
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps) const override;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
+	class UAIPerceptionStimuliSourceComponent* AIPerceptionSourceComp;
 };

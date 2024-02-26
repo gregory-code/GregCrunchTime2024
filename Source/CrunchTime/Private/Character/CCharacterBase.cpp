@@ -15,6 +15,9 @@
 
 #include "Net/UnrealNetwork.h"
 
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
+
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
 
@@ -43,6 +46,9 @@ ACCharacterBase::ACCharacterBase()
 
 	TargetingBoxComponent = CreateDefaultSubobject<UTargetingBoxComponent>("Targeting Box Component");
 	TargetingBoxComponent->SetupAttachment(GetMesh());
+
+	AIPerceptionSourceComp = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>("AI Perception Source Comp");
+	AIPerceptionSourceComp->RegisterForSense(UAISense_Sight::StaticClass());
 }
 
 void ACCharacterBase::SetupAbilitySystemComponent()
@@ -177,6 +183,7 @@ void ACCharacterBase::StartDeath()
 	AbilitySystemComponent->ApplyGameplayEffect(DeathEffect);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AIPerceptionSourceComp->UnregisterFromPerceptionSystem();
 }
 
 void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
@@ -187,6 +194,7 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		AbilitySystemComponent->ApplyFullStat();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		AIPerceptionSourceComp->RegisterWithPerceptionSystem();
 	}
 }
 

@@ -62,6 +62,7 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 
 	SetupWaitInputTask();
 
+	//needed for ai to tirgger basic attack.
 	UAbilityTask_WaitGameplayEvent* WaitForActivation = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCAbilityGenericTags::GetBasicAttackAcitvationTag());
 	WaitForActivation->EventReceived.AddDynamic(this, &UGA_MeleeCombo::TryCommitCombo);
 	WaitForActivation->ReadyForActivation();
