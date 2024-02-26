@@ -12,13 +12,18 @@
 #include "AbilitySystemBlueprintLibrary.h"
 
 #include "Components/SkeletalMeshComponent.h"
-
+#include "GameplayAbilities/CAbilityGenericTags.h"
 #include "GameplayTagsManager.h"
 
 UGA_MeleeCombo::UGA_MeleeCombo()
 {
 	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
 	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
+	
+	FAbilityTriggerData TriggerData;
+	TriggerData.TriggerTag = UCAbilityGenericTags::GetBasicAttackAcitvationTag();
+	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
+	AbilityTriggers.Add(TriggerData);
 }
 
 FGameplayTag UGA_MeleeCombo::GetComboChangeTag()

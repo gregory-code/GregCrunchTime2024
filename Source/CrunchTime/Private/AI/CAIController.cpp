@@ -2,8 +2,12 @@
 
 
 #include "AI/CAIController.h"
+
+#include "BehaviorTree/BlackboardComponent.h"
+
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+
 
 ACAIController::ACAIController()
 {
@@ -25,4 +29,28 @@ ACAIController::ACAIController()
 FGenericTeamId ACAIController::GetGenericTeamId() const
 {
 	return FGenericTeamId(254);
+}
+
+void ACAIController::BeginPlay()
+{
+	Super::BeginPlay();
+	if(BehaviorTree)
+		RunBehaviorTree(BehaviorTree);
+
+	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
+}
+
+void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
+{
+	if (!GetBlackboardComponent())
+		return;
+
+	if (Stimulus.WasSuccessfullySensed())
+	{
+		GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+	}
 }
