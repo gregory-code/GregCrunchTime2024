@@ -3,6 +3,10 @@
 
 #include "AI/CAIController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "GameplayAbilities/CAbilityGenericTags.h"
+
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "Perception/AIPerceptionComponent.h"
@@ -65,6 +69,25 @@ void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulu
 	}
 	else
 	{
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target))
+		{
+			if (TargetASC->HasMatchingGameplayTag(UCAbilityGenericTags::GetDeadTag()))
+			{
+				//UAIPerceptionComponent::FActorPerceptionContainer::TIterator
+				auto Iterator = PerceptionComponent->GetPerceptualDataIterator();
+				while (Iterator)
+				{
+					if (Iterator->Value.Target == Target)
+					{
+						for (FAIStimulus& Stimuli : Iterator->Value.LastSensedStimuli)
+						{
+							Stimuli.SetStimulusAge(TNumericLimits<float>::Max());
+						}
+					}
+					++Iterator;
+				}
+			}
+		}
 		//GetBlackboardComponent()->ClearValue(TargetBBKeyName);
 	}
 }
