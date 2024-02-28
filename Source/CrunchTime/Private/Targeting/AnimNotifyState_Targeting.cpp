@@ -6,7 +6,7 @@
 
 void UAnimNotifyState_Targeting::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	const AActor* OwnerActor = MeshComp->GetOwner();
 	TargetingBoxComponent = OwnerActor->GetComponentByClass<UTargetingBoxComponent>();
 	if (TargetingBoxComponent)
@@ -18,7 +18,7 @@ void UAnimNotifyState_Targeting::NotifyBegin(USkeletalMeshComponent* MeshComp, U
 
 void UAnimNotifyState_Targeting::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
+	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 	if (TargetingBoxComponent)
 	{
 		TargetingBoxComponent->DoTargetCheck();

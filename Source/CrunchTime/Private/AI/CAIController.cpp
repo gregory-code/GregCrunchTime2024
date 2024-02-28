@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Sight.h"
 
 
@@ -23,7 +24,10 @@ ACAIController::ACAIController()
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
+	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>("Damage Config");
+	
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
+	AIPerceptionComponent->ConfigureSense(*DamageConfig);
 }
 
 FGenericTeamId ACAIController::GetGenericTeamId() const
