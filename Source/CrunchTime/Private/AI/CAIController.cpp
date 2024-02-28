@@ -19,14 +19,16 @@ ACAIController::ACAIController()
 	SightConfig->PeripheralVisionAngleDegrees = 60.f;
 	SightConfig->SightRadius = 500.f;
 	SightConfig->LoseSightRadius = 600.f;
-
+	SightConfig->SetMaxAge(5.f);
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
 	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>("Damage Config");
+	DamageConfig->SetMaxAge(5.f);
 	
 	TouchConfig = CreateDefaultSubobject<UAISenseConfig_Touch>("Touch Config");
+	TouchConfig->SetMaxAge(5.f);
 
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
 
@@ -46,6 +48,7 @@ void ACAIController::BeginPlay()
 		RunBehaviorTree(BehaviorTree);
 
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ACAIController::TargetForgotten);
 }
 
 void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
@@ -55,10 +58,31 @@ void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulu
 
 	if (Stimulus.WasSuccessfullySensed())
 	{
-		GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);
+		if (!GetBlackboardComponent()->GetValueAsObject(TargetBBKeyName))
+		{
+			GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);
+		}
 	}
 	else
 	{
-		GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+		//GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+	}
+}
+
+void ACAIController::TargetForgotten(AActor* Target)
+{
+	AActor* CurrentTarget = Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(TargetBBKeyName));
+	if (CurrentTarget == Target)
+	{
+		TArray<AActor*> OtherTargets;
+		PerceptionComponent->GetPerceivedHostileActors(OtherTargets);
+		if (OtherTargets.Num() != 0)
+		{
+			GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, OtherTargets[0]);
+		}
+		else
+		{
+			GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+		}
 	}
 }
