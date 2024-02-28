@@ -95,6 +95,7 @@ private:
 	/*************************************************************/
 	/*                                          AI                                           */
 	/*************************************************************/
+private:
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
 
@@ -102,4 +103,7 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
 	class UAIPerceptionStimuliSourceComponent* AIPerceptionSourceComp;
+
+	UFUNCTION()
+	void HitDetected(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

@@ -17,6 +17,7 @@
 
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Touch.h"
 
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
@@ -43,6 +44,7 @@ ACCharacterBase::ACCharacterBase()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,  ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ACCharacterBase::HitDetected);
 
 	TargetingBoxComponent = CreateDefaultSubobject<UTargetingBoxComponent>("Targeting Box Component");
 	TargetingBoxComponent->SetupAttachment(GetMesh());
@@ -202,5 +204,10 @@ void ACCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(ACCharacterBase, TeamId, COND_None);
+}
+
+void ACCharacterBase::HitDetected(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UAISense_Touch::ReportTouchEvent(this, OtherActor, this, GetActorLocation());
 }
 

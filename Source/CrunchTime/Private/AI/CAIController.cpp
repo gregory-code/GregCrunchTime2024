@@ -8,7 +8,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Sight.h"
-
+#include "Perception/AISenseConfig_Touch.h"
 
 ACAIController::ACAIController()
 {
@@ -26,8 +26,12 @@ ACAIController::ACAIController()
 
 	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>("Damage Config");
 	
+	TouchConfig = CreateDefaultSubobject<UAISenseConfig_Touch>("Touch Config");
+
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
+
 	AIPerceptionComponent->ConfigureSense(*DamageConfig);
+	AIPerceptionComponent->ConfigureSense(*TouchConfig);
 }
 
 FGenericTeamId ACAIController::GetGenericTeamId() const

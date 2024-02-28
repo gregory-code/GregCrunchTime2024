@@ -89,6 +89,7 @@ void UGA_MeleeCombo::HandleDamage(FGameplayEventData Payload)
 	{
 		FGameplayEffectSpecHandle EffectSpec = MakeOutgoingGameplayEffectSpec(GetDamageEffectForCurrentCombo(), GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 		ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo,  EffectSpec, Payload.TargetData);
+		SignalDamageStimuliEvent(Payload.TargetData);
 	}
 }
 
