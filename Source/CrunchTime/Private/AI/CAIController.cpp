@@ -66,6 +66,20 @@ void ACAIController::BeginPlay()
 	}
 }
 
+void ACAIController::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
+{
+	if (GetCharacter() && GetCharacter()->GetMesh())
+	{
+		OutLocation = GetCharacter()->GetMesh()->GetSocketLocation(AIVisionAttachSocketName);
+		OutRotation = GetCharacter()->GetMesh()->GetSocketRotation(AIVisionAttachSocketName);
+		OutRotation.Pitch = 0;
+	}
+	else
+	{
+		Super::GetActorEyesViewPoint(OutLocation, OutRotation);
+	}
+}
+
 void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
 {
 	if (!GetBlackboardComponent())

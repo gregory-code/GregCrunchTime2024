@@ -17,7 +17,11 @@ public:
 	ACAIController();
 	virtual FGenericTeamId GetGenericTeamId() const override;
 	virtual void BeginPlay() override;
+	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
+	FName AIVisionAttachSocketName = "head";
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
 	class UAIPerceptionComponent* AIPerceptionComponent;
 
