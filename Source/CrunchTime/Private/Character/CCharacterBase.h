@@ -98,6 +98,13 @@ private:
 	/*************************************************************/
 	/*                                          AI                                           */
 	/*************************************************************/
+public:
+	UFUNCTION(NetMulticast, unreliable)
+	void ClientPlayAnimMontage(UAnimMontage* MontageToPlay);
+
+	UFUNCTION(NetMulticast, unreliable)
+	void ClientStopAnimMontage(UAnimMontage* MontageToStop);
+
 private:
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
