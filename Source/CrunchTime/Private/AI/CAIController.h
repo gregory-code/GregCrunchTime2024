@@ -41,4 +41,6 @@ private:
 
 	UFUNCTION()
 	void TargetForgotten(AActor* Target);
+
+	void PawnDeathStatusChanged(bool bIsDead);
 };

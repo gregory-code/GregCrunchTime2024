@@ -186,6 +186,7 @@ void ACCharacterBase::StartDeath()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AIPerceptionSourceComp->UnregisterFromPerceptionSystem();
+	OnDeadStatusChanged.Broadcast(true);
 }
 
 void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
@@ -197,6 +198,7 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		AbilitySystemComponent->ApplyFullStat();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AIPerceptionSourceComp->RegisterWithPerceptionSystem();
+		OnDeadStatusChanged.Broadcast(false);
 	}
 }
 

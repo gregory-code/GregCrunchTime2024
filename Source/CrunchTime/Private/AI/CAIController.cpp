@@ -5,14 +5,19 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "GameplayAbilities/CAbilityGenericTags.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BrainComponent.h"
+
+#include "Character/CCharacterBase.h"
+
+#include "GameplayAbilities/CAbilityGenericTags.h"
 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Touch.h"
+
 
 ACAIController::ACAIController()
 {
@@ -53,6 +58,12 @@ void ACAIController::BeginPlay()
 
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
 	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ACAIController::TargetForgotten);
+
+	ACCharacterBase* PawnAsCharacter = Cast<ACCharacterBase>(GetPawn());
+	if (PawnAsCharacter)
+	{
+		PawnAsCharacter->OnDeadStatusChanged.AddUObject(this, &ACAIController::PawnDeathStatusChanged);
+	}
 }
 
 void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
@@ -88,7 +99,6 @@ void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulu
 				}
 			}
 		}
-		//GetBlackboardComponent()->ClearValue(TargetBBKeyName);
 	}
 }
 
@@ -107,5 +117,17 @@ void ACAIController::TargetForgotten(AActor* Target)
 		{
 			GetBlackboardComponent()->ClearValue(TargetBBKeyName);
 		}
+	}
+}
+
+void ACAIController::PawnDeathStatusChanged(bool bIsDead)
+{
+	if (bIsDead)
+	{
+		GetBrainComponent()->StopLogic("Dead");
+	}
+	else
+	{
+		GetBrainComponent()->StartLogic();
 	}
 }
