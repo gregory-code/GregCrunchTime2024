@@ -12,7 +12,7 @@
 
 bool UCAnimInstance::ShouldDoUpperBody() const
 {
-	return IsMoving() || IsJumping();
+	return IsMoving() || IsJumping() || GetIsAiming();
 }
 
 void UCAnimInstance::NativeInitializeAnimation()
@@ -57,8 +57,13 @@ void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 
 		YawSpeed = FMath::FInterpTo(YawSpeed, RotDelta.Yaw/DeltaSeconds, DeltaSeconds, 10.f);
 
+		FVector Velocity = OwnerCharacter->GetVelocity();
 
-
+		FVector LookDir = lookRot.Vector();
+		LookDir.Z = 0;
+		LookDir.Normalize();
+		FwdSpeed = Velocity.Dot(LookDir);
+		RightSpeed = -Velocity.Dot(LookDir.Cross(FVector::UpVector));
 	}
 }
 
