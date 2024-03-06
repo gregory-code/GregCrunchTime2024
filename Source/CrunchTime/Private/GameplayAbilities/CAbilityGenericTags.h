@@ -20,4 +20,5 @@ public:
 	static FGameplayTag GetFullHealthTag();
 	static FGameplayTag GetDeadTag();
 	static FGameplayTag GetBasicAttackAcitvationTag();
+	static FGameplayTag GetAimingTag();
 };

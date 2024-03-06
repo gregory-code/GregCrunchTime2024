@@ -38,6 +38,7 @@ ACCharacterBase::ACCharacterBase()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &ACCharacterBase::HealthUpdated);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &ACCharacterBase::MaxHealthUpdated);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetDeadTag()).AddUObject(this, &ACCharacterBase::DeathTagChanged);
+	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetAimingTag()).AddUObject(this, &ACCharacterBase::AimingTagChanged);
 
 	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
 	StatusWidgetComp->SetupAttachment(GetRootComponent());
@@ -143,6 +144,12 @@ void ACCharacterBase::InitStatusHUD()
 		if(GetController() && GetController()->IsPlayerController())
 			StatusGuage->SetVisibility(ESlateVisibility::Hidden);
 	}
+}
+
+void ACCharacterBase::AimingTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
+{
+	bIsAiming = NewStackCount != 0;
+	AimingTagChanged(bIsAiming);
 }
 
 void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)

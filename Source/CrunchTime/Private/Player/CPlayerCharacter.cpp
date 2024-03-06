@@ -93,3 +93,9 @@ FVector ACPlayerCharacter::GetMoveRightDir() const
 {
 	return viewCamera->GetRightVector();
 }
+
+void ACPlayerCharacter::AimingTagChanged(bool bNewIsAiming)
+{
+	bUseControllerRotationYaw = bNewIsAiming;
+	GetCharacterMovement()->bOrientRotationToMovement = !bNewIsAiming;
+}

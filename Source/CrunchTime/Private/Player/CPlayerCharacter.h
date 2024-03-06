@@ -68,4 +68,6 @@ private:
 
 	FVector GetMoveFwdDir() const;
 	FVector GetMoveRightDir() const;
+
+	virtual void AimingTagChanged(bool bNewIsAiming) override;
 };

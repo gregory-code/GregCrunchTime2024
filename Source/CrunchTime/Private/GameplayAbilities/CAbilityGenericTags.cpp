@@ -22,3 +22,8 @@ FGameplayTag UCAbilityGenericTags::GetBasicAttackAcitvationTag()
 {
 	return FGameplayTag::RequestGameplayTag("ability.attack.activate");
 }
+
+FGameplayTag UCAbilityGenericTags::GetAimingTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.aiming");
+}
