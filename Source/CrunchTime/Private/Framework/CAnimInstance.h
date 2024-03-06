@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "GameplayTagContainer.h"
 #include "CAnimInstance.generated.h"
 
 class ACharacter;
@@ -40,6 +41,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool ShouldDoUpperBody() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool GetIsAiming() const { return bIsAiming; }
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
@@ -62,4 +66,8 @@ private:
 
 	FRotator PrevRot;
 	float YawSpeed;
+	
+	bool bIsAiming;
+
+	void AimingTagChanged(const FGameplayTag TagChanged, int32 NewStackCount);
 };
