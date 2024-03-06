@@ -53,6 +53,7 @@ void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComp->BindAction(lookInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Look);
 		enhancedInputComp->BindAction(jumpInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Jump);
 		enhancedInputComp->BindAction(baiscAttackAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::DoBasicAttack);
+		enhancedInputComp->BindAction(AbilityOneInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::TryActivateAbilityOne);
 	}
 }
 
@@ -74,6 +75,11 @@ void ACPlayerCharacter::Look(const FInputActionValue& InputValue)
 void ACPlayerCharacter::DoBasicAttack()
 {
 	GetAbilitySystemComponent()->PressInputID((int)EAbilityInputID::BasicAttack);
+}
+
+void ACPlayerCharacter::TryActivateAbilityOne()
+{
+	GetAbilitySystemComponent()->PressInputID((int)EAbilityInputID::AbilityOne);
 }
 
 FVector ACPlayerCharacter::GetMoveFwdDir() const
