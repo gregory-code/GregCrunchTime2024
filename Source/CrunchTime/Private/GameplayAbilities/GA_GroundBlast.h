@@ -15,4 +15,6 @@ class UGA_GroundBlast : public UGA_AbilityBase
 	GENERATED_BODY()
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* TargettingMontage;
 };
