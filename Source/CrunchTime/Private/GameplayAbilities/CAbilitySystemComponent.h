@@ -32,4 +32,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Init")
 	TMap<EAbilityInputID, TSubclassOf<class UGA_AbilityBase>> GenericAbilities;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Init")
+	TMap<EAbilityInputID, TSubclassOf<class UGA_AbilityBase>> Abilities;
 };
