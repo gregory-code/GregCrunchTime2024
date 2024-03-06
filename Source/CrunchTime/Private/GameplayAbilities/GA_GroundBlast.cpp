@@ -28,5 +28,4 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 	PlayTargetingMontageTask->ReadyForActivation();
 
 	UE_LOG(LogTemp, Warning, TEXT("Casting GroundBlast"));
-	K2_EndAbility();
 }
