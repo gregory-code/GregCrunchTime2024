@@ -2,6 +2,9 @@
 
 
 #include "Targeting/CTargetActor_GroundPick.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+
 #include "Components/SphereComponent.h"
 #include "Components/DecalComponent.h"
 
@@ -42,6 +45,28 @@ void ACTargetActor_GroundPick::Tick(float DeltaSecond)
 	{
 		SetActorLocation(PlayerView.ImpactPoint);
 	}
+}
+
+bool ACTargetActor_GroundPick::IsConfirmTargetingAllowed()
+{
+	return GetPlayerView().bBlockingHit;
+}
+
+void ACTargetActor_GroundPick::ConfirmTargetingAndContinue()
+{
+	//set is having all unique elements.
+	TSet<AActor*> CurrentActorsInRange;
+	TargetSphere->GetOverlappingActors(CurrentActorsInRange, APawn::StaticClass());
+
+	TArray<AActor*> Targets;
+	for (AActor* ActorInRange : CurrentActorsInRange)
+	{
+		if(ActorInRange != PrimaryPC->GetPawn())
+			Targets.Add(ActorInRange);
+	}
+
+	FGameplayAbilityTargetDataHandle TargetDataHandle = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(Targets, false);
+	TargetDataReadyDelegate.Broadcast(TargetDataHandle);
 }
 
 FHitResult ACTargetActor_GroundPick::GetPlayerView() const

@@ -21,6 +21,11 @@ public:
 	void SetTargettingRange(float NewTargettingRange);
 
 	void Tick(float DeltaSecond) override;
+
+	virtual bool IsConfirmTargetingAllowed() override;
+
+	virtual void ConfirmTargetingAndContinue() override;
+
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Targetting")
 	class USphereComponent* TargetSphere;

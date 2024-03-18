@@ -61,6 +61,15 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Target aquired"));
+	if (K2_HasAuthority())
+	{
+		for (TSubclassOf<UGameplayEffect>& DamageEffect : DamageEffects)
+		{
+			FGameplayEffectSpecHandle DamageSpec = MakeOutgoingGameplayEffectSpec(DamageEffect, GetCurrentAbilitySpec()->Level);
+			ApplyGameplayEffectSpecToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), DamageSpec, Data);
+		}
+		SignalDamageStimuliEvent(Data);
+	}
 
 
 	K2_EndAbility();
