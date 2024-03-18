@@ -60,6 +60,12 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
 void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data)
 {
+	if (!K2_CommitAbility())
+	{
+		K2_EndAbility();
+		return;
+	}
+
 	UE_LOG(LogTemp, Warning, TEXT("Target aquired"));
 	if (K2_HasAuthority())
 	{
