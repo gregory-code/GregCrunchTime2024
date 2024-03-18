@@ -61,6 +61,9 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Target aquired"));
+
+
+	K2_EndAbility();
 }
 
 void UGA_GroundBlast::TargetCancelled(const FGameplayAbilityTargetDataHandle& Data)

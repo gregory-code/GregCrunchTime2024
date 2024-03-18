@@ -58,6 +58,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* AbilityOneInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* AbilityConfirmAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* AbilityCancelAction;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
@@ -71,6 +77,13 @@ private:
 	
 	UFUNCTION()
 	void TryActivateAbilityOne();
+
+	UFUNCTION()
+	void ComfirmActionTriggered();
+	
+	UFUNCTION()
+	void CancelActionTriggered();
+
 
 	FVector GetMoveFwdDir() const;
 	FVector GetMoveRightDir() const;

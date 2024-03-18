@@ -57,6 +57,10 @@ FHitResult ACTargetActor_GroundPick::GetPlayerView() const
 		FVector TraceEnd = ViewLoc + ViewRot.Vector() * TargettingRange;
 
 		GetWorld()->LineTraceSingleByChannel(HitResult, ViewLoc, TraceEnd, ECC_Visibility);
+		if (!HitResult.bBlockingHit)
+		{
+			GetWorld()->LineTraceSingleByChannel(HitResult, TraceEnd, TraceEnd + FVector::DownVector * TargettingRange, ECC_Visibility);
+		}
 	}
 
 	return HitResult;

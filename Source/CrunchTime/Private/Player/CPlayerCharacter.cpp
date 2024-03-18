@@ -54,6 +54,8 @@ void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComp->BindAction(jumpInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Jump);
 		enhancedInputComp->BindAction(baiscAttackAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::DoBasicAttack);
 		enhancedInputComp->BindAction(AbilityOneInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::TryActivateAbilityOne);
+		enhancedInputComp->BindAction(AbilityConfirmAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::ComfirmActionTriggered);
+		enhancedInputComp->BindAction(AbilityCancelAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::CancelActionTriggered);
 	}
 }
 
@@ -80,6 +82,18 @@ void ACPlayerCharacter::DoBasicAttack()
 void ACPlayerCharacter::TryActivateAbilityOne()
 {
 	GetAbilitySystemComponent()->PressInputID((int)EAbilityInputID::AbilityOne);
+}
+
+void ACPlayerCharacter::ComfirmActionTriggered()
+{
+	UE_LOG(LogTemp, Warning,TEXT("Confirmed"));
+	GetAbilitySystemComponent()->InputConfirm();
+}
+
+void ACPlayerCharacter::CancelActionTriggered()
+{
+	UE_LOG(LogTemp, Warning,TEXT("Cancelled"));
+	GetAbilitySystemComponent()->InputCancel();
 }
 
 FVector ACPlayerCharacter::GetMoveFwdDir() const
