@@ -29,6 +29,12 @@ private:
 	UPROPERTY(visibleAnywhere, Category="View")
 	UCameraComponent* viewCamera;
 
+	UPROPERTY(EditDefaultsOnly, Category="View")
+	FVector AimCameraLocalOffset;
+
+	UPROPERTY(EditDefaultsOnly, Category="View")
+	float AimCameraLerpingSpeed = 5;
+
 	virtual void PawnClientRestart() override;
 
 	/*****************************************************/
@@ -70,4 +76,8 @@ private:
 	FVector GetMoveRightDir() const;
 
 	virtual void AimingTagChanged(bool bNewIsAiming) override;
+	
+	void LerpCameraToLocalOffset(const FVector& LocalOffset);
+	void TickCameraLocalOffset(FVector Goal);
+	FTimerHandle CameraLerpHandle;
 };
