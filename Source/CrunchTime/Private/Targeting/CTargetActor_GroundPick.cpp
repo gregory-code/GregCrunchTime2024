@@ -19,6 +19,8 @@ ACTargetActor_GroundPick::ACTargetActor_GroundPick()
 
 	TargetDecal = CreateDefaultSubobject<UDecalComponent>("TargetDecal");
 	TargetDecal->SetupAttachment(GetRootComponent());
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void ACTargetActor_GroundPick::SetTargettingRadius(float TargettingRadius)
@@ -30,4 +32,32 @@ void ACTargetActor_GroundPick::SetTargettingRadius(float TargettingRadius)
 void ACTargetActor_GroundPick::SetTargettingRange(float NewTargettingRange)
 {
 	TargettingRange = NewTargettingRange;
+}
+
+void ACTargetActor_GroundPick::Tick(float DeltaSecond)
+{
+	Super::Tick(DeltaSecond);
+	FHitResult PlayerView = GetPlayerView();
+	if (PlayerView.bBlockingHit)
+	{
+		SetActorLocation(PlayerView.ImpactPoint);
+	}
+}
+
+FHitResult ACTargetActor_GroundPick::GetPlayerView() const
+{
+	FHitResult HitResult;
+	if (PrimaryPC)
+	{
+		FVector ViewLoc;
+		FRotator ViewRot;
+
+		PrimaryPC->GetPlayerViewPoint(ViewLoc, ViewRot);
+		
+		FVector TraceEnd = ViewLoc + ViewRot.Vector() * TargettingRange;
+
+		GetWorld()->LineTraceSingleByChannel(HitResult, ViewLoc, TraceEnd, ECC_Visibility);
+	}
+
+	return HitResult;
 }

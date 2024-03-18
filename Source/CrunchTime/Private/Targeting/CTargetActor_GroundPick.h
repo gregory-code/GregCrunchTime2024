@@ -20,6 +20,7 @@ public:
 	
 	void SetTargettingRange(float NewTargettingRange);
 
+	void Tick(float DeltaSecond) override;
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Targetting")
 	class USphereComponent* TargetSphere;
@@ -28,4 +29,6 @@ private:
 	class UDecalComponent* TargetDecal;
 
 	float TargettingRange;
+
+	FHitResult GetPlayerView() const;
 };
