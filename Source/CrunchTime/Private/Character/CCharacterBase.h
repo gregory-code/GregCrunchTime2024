@@ -63,6 +63,8 @@ private:
 	virtual void AimingTagChanged(bool bNewIsAiming) {/*empty in base*/};
 	bool bIsAiming;
 
+	void StunTagChanged(const FGameplayTag TagChanged, int32 NewStackCount);
+
 	UPROPERTY(VisibleAnywhere, Category = "Gameplay Ability")
 	UCAbilitySystemComponent* AbilitySystemComponent;
 
@@ -86,10 +88,15 @@ private:
 	/*                              Gameplay Cue                                   */
 	/*************************************************************/
 public:
+	virtual void StartStunAnim() override;
+	virtual void StopStunAnim() override;
 	virtual void PlayHitReaction() override;
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
 	UAnimMontage* HitReactionMontage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
+	UAnimMontage* StunMontage;
 
 	/*************************************************************/
 	/*                                      Death                                      */

@@ -3,6 +3,9 @@
 
 #include "Character/CCharacterBase.h"
 
+#include "AIController.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameplayAbilities/CAbilitySystemComponent.h"
@@ -41,6 +44,7 @@ ACCharacterBase::ACCharacterBase()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxManaAttribute()).AddUObject(this, &ACCharacterBase::MaxManaUpdated);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetDeadTag()).AddUObject(this, &ACCharacterBase::DeathTagChanged);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetAimingTag()).AddUObject(this, &ACCharacterBase::AimingTagChanged);
+	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetStunedTag()).AddUObject(this, &ACCharacterBase::StunTagChanged);
 
 	StatusWidgetComp = CreateDefaultSubobject<UWidgetComponent>("Status Widget Comp");
 	StatusWidgetComp->SetupAttachment(GetRootComponent());
@@ -155,6 +159,33 @@ void ACCharacterBase::AimingTagChanged(const FGameplayTag TagChanged, int32 NewS
 	AimingTagChanged(bIsAiming);
 }
 
+void ACCharacterBase::StunTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
+{
+	if (NewStackCount != 0)
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		AAIController* AIC = GetController<AAIController>();
+		if (AIC)
+		{
+			AIC->GetBrainComponent()->StopLogic("Stunned");
+		}
+		TArray<FGameplayAbilitySpec> AllAbilities = GetAbilitySystemComponent()->GetActivatableAbilities();
+		for (FGameplayAbilitySpec& Spec : AllAbilities)
+		{
+			GetAbilitySystemComponent()->CallServerEndAbility(Spec.Handle, Spec.ActivationInfo, FPredictionKey());
+		}
+	}
+	else
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		AAIController* AIC = GetController<AAIController>();
+		if (AIC)
+		{
+			AIC->GetBrainComponent()->StartLogic();
+		}
+	}
+}
+
 void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if(StatusGuage)
@@ -205,6 +236,16 @@ void ACCharacterBase::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if (StatusGuage)
 		StatusGuage->SetMana(AttributeSet->GetMana(), ChangeData.NewValue);
+}
+
+void ACCharacterBase::StartStunAnim()
+{
+	PlayMontage(StunMontage);
+}
+
+void ACCharacterBase::StopStunAnim()
+{
+	GetMesh()->GetAnimInstance()->Montage_Stop(0.2, StunMontage);
 }
 
 void ACCharacterBase::PlayHitReaction()

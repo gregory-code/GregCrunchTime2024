@@ -16,4 +16,10 @@ class UCGameplayCueNotify_StaticBase : public UGameplayCueNotify_Static
 	
 	UFUNCTION(BlueprintCallable, Category = "Gameplay Cue")
 	static void PlayHitReaction(AActor* Target);
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Cue")
+	static void PlayStunAnim(AActor* Target);
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Cue")
+	static void StopStunAnim(AActor* Target);
 };

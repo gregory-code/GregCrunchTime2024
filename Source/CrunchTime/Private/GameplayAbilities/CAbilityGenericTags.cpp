@@ -32,3 +32,8 @@ FGameplayTag UCAbilityGenericTags::GetAimingTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.aiming");
 }
+
+FGameplayTag UCAbilityGenericTags::GetStunedTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.stun");
+}

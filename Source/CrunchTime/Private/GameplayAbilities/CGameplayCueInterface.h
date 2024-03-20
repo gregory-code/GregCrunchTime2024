@@ -23,4 +23,6 @@ class ICGameplayCueInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void PlayHitReaction() = 0; //this a pure virtual function. also made the class abstract.
+	virtual void StartStunAnim() = 0;
+	virtual void StopStunAnim() = 0;
 };

@@ -11,3 +11,19 @@ void UCGameplayCueNotify_StaticBase::PlayHitReaction(AActor* Target)
 		Interafce->PlayHitReaction();
 	}
 }
+
+void UCGameplayCueNotify_StaticBase::PlayStunAnim(AActor* Target)
+{
+	if (ICGameplayCueInterface* Interafce = Cast<ICGameplayCueInterface>(Target))
+	{
+		Interafce->StartStunAnim();
+	}
+}
+
+void UCGameplayCueNotify_StaticBase::StopStunAnim(AActor* Target)
+{
+	if (ICGameplayCueInterface* Interafce = Cast<ICGameplayCueInterface>(Target))
+	{
+		Interafce->StopStunAnim();
+	}
+}

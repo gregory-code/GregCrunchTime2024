@@ -9,6 +9,7 @@
 UGA_AbilityBase::UGA_AbilityBase()
 {
 	ActivationBlockedTags.AddTag(UCAbilityGenericTags::GetDeadTag());
+	ActivationBlockedTags.AddTag(UCAbilityGenericTags::GetStunedTag());
 }
 
 void UGA_AbilityBase::SignalDamageStimuliEvent(FGameplayAbilityTargetDataHandle TargetHandle)
