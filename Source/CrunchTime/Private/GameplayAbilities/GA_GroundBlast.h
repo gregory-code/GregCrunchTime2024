@@ -24,6 +24,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* TargettingMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* CastingMontage;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	TSubclassOf<class ACTargetActor_GroundPick> TargetActorClass;
 	

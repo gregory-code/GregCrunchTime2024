@@ -17,6 +17,8 @@ void UGameplayUI::NativeConstruct()
 	{
 		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &UGameplayUI::HealthUpdated);
 		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &UGameplayUI::MaxHealthUpdated);
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetManaAttribute()).AddUObject(this, &UGameplayUI::ManaUpdated);
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxManaAttribute()).AddUObject(this, &UGameplayUI::MaxManaUpdated);
 	}
 
 	OwnerAbilitySystemComponent = OwnerASC;
@@ -30,6 +32,17 @@ void UGameplayUI::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 void UGameplayUI::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	StatusGuage->SetHealth(GetAttributeValue(UCAttributeSet::GetHealthAttribute()), ChangeData.NewValue);
+}
+
+void UGameplayUI::ManaUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	StatusGuage->SetMana(ChangeData.NewValue, GetAttributeValue(UCAttributeSet::GetMaxManaAttribute()));
+}
+
+void UGameplayUI::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	StatusGuage->SetMana(GetAttributeValue(UCAttributeSet::GetManaAttribute()), ChangeData.NewValue);
+
 }
 
 float UGameplayUI::GetAttributeValue(const FGameplayAttribute& Attribute) const

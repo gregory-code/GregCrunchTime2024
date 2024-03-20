@@ -37,6 +37,8 @@ ACCharacterBase::ACCharacterBase()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &ACCharacterBase::HealthUpdated);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &ACCharacterBase::MaxHealthUpdated);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetManaAttribute()).AddUObject(this, &ACCharacterBase::ManaUpdated);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxManaAttribute()).AddUObject(this, &ACCharacterBase::MaxManaUpdated);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetDeadTag()).AddUObject(this, &ACCharacterBase::DeathTagChanged);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetAimingTag()).AddUObject(this, &ACCharacterBase::AimingTagChanged);
 
@@ -138,6 +140,7 @@ void ACCharacterBase::InitStatusHUD()
 	StatusGuage->SetRenderScale(FVector2D{0.5f});
 
 	StatusGuage->SetHealth(AttributeSet->GetHealth(), AttributeSet->GetMaxHealth());
+	StatusGuage->SetMana(AttributeSet->GetMana(), AttributeSet->GetMaxMana());
 
 	if (IsLocallyControlled())
 	{
@@ -175,10 +178,33 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 	}
 }
 
+void ACCharacterBase::ManaUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (StatusGuage)
+		StatusGuage->SetMana(ChangeData.NewValue, AttributeSet->GetMaxMana());
+
+	if (HasAuthority())
+	{
+		if (ChangeData.NewValue >= AttributeSet->GetMaxMana())
+		{
+			AbilitySystemComponent->AddLooseGameplayTag(UCAbilityGenericTags::GetFullManaTag());
+		}
+		else
+		{
+			AbilitySystemComponent->RemoveLooseGameplayTag(UCAbilityGenericTags::GetFullManaTag());
+		}
+	}
+}
 void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
-	if(StatusGuage)
+	if (StatusGuage)
 		StatusGuage->SetHealth(AttributeSet->GetHealth(), ChangeData.NewValue);
+}
+
+void ACCharacterBase::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (StatusGuage)
+		StatusGuage->SetMana(AttributeSet->GetMana(), ChangeData.NewValue);
 }
 
 void ACCharacterBase::PlayHitReaction()

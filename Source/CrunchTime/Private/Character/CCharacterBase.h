@@ -78,6 +78,10 @@ private:
 	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
 
+	void ManaUpdated(const FOnAttributeChangeData& ChangeData);
+	void MaxManaUpdated(const FOnAttributeChangeData& ChangeData);
+
+
 	/*************************************************************/
 	/*                              Gameplay Cue                                   */
 	/*************************************************************/

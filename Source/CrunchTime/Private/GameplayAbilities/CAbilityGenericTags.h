@@ -18,7 +18,9 @@ class UCAbilityGenericTags : public UBlueprintFunctionLibrary
 public:
 	static FGameplayTag GetGenericTargetAquiredTag();
 	static FGameplayTag GetFullHealthTag();
+	static FGameplayTag GetFullManaTag();
 	static FGameplayTag GetDeadTag();
 	static FGameplayTag GetBasicAttackAcitvationTag();
 	static FGameplayTag GetAimingTag();
+
 };

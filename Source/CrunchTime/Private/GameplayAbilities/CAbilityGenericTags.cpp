@@ -13,6 +13,11 @@ FGameplayTag UCAbilityGenericTags::GetFullHealthTag()
 	return FGameplayTag::RequestGameplayTag("stat.fullHealth");
 }
 
+FGameplayTag UCAbilityGenericTags::GetFullManaTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.fullMana");
+}
+
 FGameplayTag UCAbilityGenericTags::GetDeadTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.dead");

@@ -60,15 +60,15 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
 void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data)
 {
-	if (!K2_CommitAbility())
-	{
-		K2_EndAbility();
-		return;
-	}
-
 	UE_LOG(LogTemp, Warning, TEXT("Target aquired"));
 	if (K2_HasAuthority())
 	{
+		if (!K2_CommitAbility())
+		{
+			K2_EndAbility();
+			return;
+		}
+
 		for (TSubclassOf<UGameplayEffect>& DamageEffect : DamageEffects)
 		{
 			FGameplayEffectSpecHandle DamageSpec = MakeOutgoingGameplayEffectSpec(DamageEffect, GetCurrentAbilitySpec()->Level);
@@ -77,6 +77,7 @@ void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data
 		SignalDamageStimuliEvent(Data);
 	}
 
+	GetOwningComponentFromActorInfo()->GetAnimInstance()->Montage_Play(CastingMontage);
 
 	K2_EndAbility();
 }
