@@ -5,10 +5,14 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 
+#include "Components/HorizontalBox.h"
+#include "Components/HorizontalBoxSlot.h"
+
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
 #include "GameplayAbilitySpec.h"
 
+#include "Widgets/AbilityGuage.h"
 #include "Widgets/StatusGuage.h"
 
 void UGameplayUI::NativeConstruct()
@@ -26,13 +30,17 @@ void UGameplayUI::NativeConstruct()
 
 	OwnerAbilitySystemComponent = OwnerASC;
 
+	AbilityHBox->ClearChildren();
+
 	const UCAbilitySystemComponent* CAbilitySystemComp = Cast<UCAbilitySystemComponent>(OwnerASC);
 	if (CAbilitySystemComp)
 	{
 		TArray<const FGameplayAbilitySpec*> GrantedAbilities = CAbilitySystemComp->GetGrantedNoneGenericAbilities();
 		for (const FGameplayAbilitySpec* GrantedAbility : GrantedAbilities)
 		{
-			
+			UAbilityGuage* NewAbilityGuage = CreateWidget<UAbilityGuage>(this, AbilityGuageClass);
+			UHorizontalBoxSlot* AbilitySlot =  AbilityHBox->AddChildToHorizontalBox(NewAbilityGuage);
+			AbilitySlot->SetPadding(FMargin(5));
 		}
 	}
 }

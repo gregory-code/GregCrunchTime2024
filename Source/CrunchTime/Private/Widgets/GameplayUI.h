@@ -24,6 +24,9 @@ private:
 	UPROPERTY(meta=(BindWidget))
 	class UHorizontalBox* AbilityHBox;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Ability")
+	TSubclassOf<class UAbilityGuage> AbilityGuageClass;
+
 	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxHealthUpdated(const FOnAttributeChangeData& ChangeData);
 
