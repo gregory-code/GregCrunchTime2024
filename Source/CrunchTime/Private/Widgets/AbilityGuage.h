@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "AbilityGuage.generated.h"
 
+struct FGameplayAbilitySpec;
 /**
  * 
  */
@@ -13,6 +14,8 @@ UCLASS()
 class UAbilityGuage : public UUserWidget
 {
 	GENERATED_BODY()
+public:
+	void SetupOwingAbilitySpec(const FGameplayAbilitySpec* OwningSpec);
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* IconImage;

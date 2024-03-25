@@ -16,7 +16,12 @@ class UGA_AbilityBase : public UGameplayAbility
 public:
 	UGA_AbilityBase();
 
+	UTexture2D* GetIconTexture() const { return IconTexture; }
+
 protected:
 	void SignalDamageStimuliEvent(FGameplayAbilityTargetDataHandle TargetHandle);
 	void ExecuteSpawnVFXCue(UParticleSystem* VFXToSpawn, float Size, const FVector& Location);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	UTexture2D* IconTexture;
 };
