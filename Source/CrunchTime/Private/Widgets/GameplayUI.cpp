@@ -5,7 +5,10 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 
+#include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
+#include "GameplayAbilitySpec.h"
+
 #include "Widgets/StatusGuage.h"
 
 void UGameplayUI::NativeConstruct()
@@ -22,6 +25,16 @@ void UGameplayUI::NativeConstruct()
 	}
 
 	OwnerAbilitySystemComponent = OwnerASC;
+
+	const UCAbilitySystemComponent* CAbilitySystemComp = Cast<UCAbilitySystemComponent>(OwnerASC);
+	if (CAbilitySystemComp)
+	{
+		TArray<const FGameplayAbilitySpec*> GrantedAbilities = CAbilitySystemComp->GetGrantedNoneGenericAbilities();
+		for (const FGameplayAbilitySpec* GrantedAbility : GrantedAbilities)
+		{
+			
+		}
+	}
 }
 
 void UGameplayUI::HealthUpdated(const FOnAttributeChangeData& ChangeData)
