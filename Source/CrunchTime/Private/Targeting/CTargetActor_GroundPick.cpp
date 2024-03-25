@@ -64,8 +64,17 @@ void ACTargetActor_GroundPick::ConfirmTargetingAndContinue()
 		if(ActorInRange != PrimaryPC->GetPawn())
 			Targets.Add(ActorInRange);
 	}
-
+	
 	FGameplayAbilityTargetDataHandle TargetDataHandle = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(Targets, false);
+	
+	FHitResult CenterLocationHitResult;
+	CenterLocationHitResult.ImpactPoint = GetActorLocation();
+	
+	//using the new keyword, means that we are allocating memory on the heap, it's dynamic memory, not manager automatically.
+	FGameplayAbilityTargetData_SingleTargetHit* TargetCenterLocationData = new FGameplayAbilityTargetData_SingleTargetHit{ CenterLocationHitResult };
+	
+	TargetDataHandle.Add(TargetCenterLocationData);
+
 	TargetDataReadyDelegate.Broadcast(TargetDataHandle);
 }
 

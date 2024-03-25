@@ -61,7 +61,7 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Target aquired"));
-	if (K2_HasAuthority())
+	if (HasAuthorityOrPredictionKey(CurrentActorInfo, &CurrentActivationInfo))
 	{
 		if (!K2_CommitAbility())
 		{
@@ -75,6 +75,12 @@ void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data
 			ApplyGameplayEffectSpecToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), DamageSpec, Data);
 		}
 		SignalDamageStimuliEvent(Data);
+	}
+
+	const FHitResult* BlastLocationHitResult = Data.Get(1)->GetHitResult();
+	if (BlastLocationHitResult)
+	{
+		ExecuteSpawnVFXCue(BlastVFX, BlastVFXSize, BlastLocationHitResult->ImpactPoint);
 	}
 
 	GetOwningComponentFromActorInfo()->GetAnimInstance()->Montage_Play(CastingMontage);

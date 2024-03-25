@@ -35,6 +35,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	float TargettingRange = 1200.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UParticleSystem* BlastVFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	float BlastVFXSize = 10.f;
 
 	UFUNCTION()
 	void TargetAquired(const FGameplayAbilityTargetDataHandle& Data);
