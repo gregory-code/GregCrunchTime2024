@@ -37,3 +37,8 @@ FGameplayTag UCAbilityGenericTags::GetStunedTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.stun");
 }
+
+FGameplayTag UCAbilityGenericTags::GetSpawnVFXCueTag()
+{
+	return FGameplayTag::RequestGameplayTag("GameplayCue.spawnVFX");
+}

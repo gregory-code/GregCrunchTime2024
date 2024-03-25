@@ -23,5 +23,5 @@ public:
 	static FGameplayTag GetBasicAttackAcitvationTag();
 	static FGameplayTag GetAimingTag();
 	static FGameplayTag GetStunedTag();
-
+	static FGameplayTag GetSpawnVFXCueTag();
 };
