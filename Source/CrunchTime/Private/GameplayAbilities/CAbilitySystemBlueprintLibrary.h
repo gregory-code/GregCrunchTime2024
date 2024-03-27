@@ -16,4 +16,5 @@ class UCAbilitySystemBlueprintLibrary : public UAbilitySystemBlueprintLibrary
 public:
 	static float GetAbilityStaticCooldownDuration(const UGameplayAbility* AbilityCDO);
 	static float GetAbilityStaticManaCost(const UGameplayAbility* AbilityCDO);
+	static float GetActiveAbilityManaCost(const class UAbilitySystemComponent* ASC, const UGameplayAbility* AbilityCDO);
 };
