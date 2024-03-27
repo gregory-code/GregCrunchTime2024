@@ -7,6 +7,7 @@
 #include "AbilityGuage.generated.h"
 
 struct FGameplayAbilitySpec;
+class UGA_AbilityBase;
 /**
  * 
  */
