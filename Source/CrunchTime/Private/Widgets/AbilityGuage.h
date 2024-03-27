@@ -41,4 +41,17 @@ private:
 	FName IconTextureMaterialParamName = "Icon";
 
 	const class UGA_AbilityBase* AbilityCDO;
+	UMaterialInstanceDynamic* IconMat;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Cooldown")
+	float CooldownTickInterval = 1.f / 24.f;
+
+	FTimerHandle CooldownTickTimerHandle;
+
+	void TickCooldown();
+
+	void CooldownFinished();
+
+	float CooldownDuration = 0;
+	float CooldownTimeRemaining = 0;
 };
