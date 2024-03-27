@@ -35,4 +35,6 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Icon")
 	FName IconTextureMaterialParamName = "Icon";
+
+	const class UGA_AbilityBase* AbilityCDO;
 };
