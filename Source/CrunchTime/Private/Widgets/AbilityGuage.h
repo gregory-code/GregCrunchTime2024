@@ -8,6 +8,7 @@
 
 struct FGameplayAbilitySpec;
 class UGA_AbilityBase;
+class UGameplayAbility;
 /**
  * 
  */
@@ -17,7 +18,10 @@ class UAbilityGuage : public UUserWidget
 	GENERATED_BODY()
 public:
 	void SetupOwingAbilityCDO(const UGA_AbilityBase* OwningAbilityCDO);
+	void SubscribeAbilityCommitedDelegate();
 private:
+	void AbilityCommited(UGameplayAbility* Ability);
+
 	UPROPERTY(meta = (BindWidget))
 	class UImage* IconImage;
 	

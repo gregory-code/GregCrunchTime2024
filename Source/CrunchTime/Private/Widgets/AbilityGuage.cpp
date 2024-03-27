@@ -3,6 +3,8 @@
 
 #include "Widgets/AbilityGuage.h"
 
+#include "AbilitySystemComponent.h"
+
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
@@ -29,9 +31,30 @@ void UAbilityGuage::SetupOwingAbilityCDO(const UGA_AbilityBase* OwningAbilityCDO
 		ManaCostText->SetText(FText::AsNumber(ManaCost, &FormattingOptions));
 	
 		CooldownCounterText->SetVisibility(ESlateVisibility::Hidden);
+		SubscribeAbilityCommitedDelegate();
 	}
 	else
 	{
 		//make it empty
+	}
+}
+
+void UAbilityGuage::SubscribeAbilityCommitedDelegate()
+{
+	UAbilitySystemComponent* OwningASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwningPlayerPawn());
+	if (OwningASC)
+	{
+		if (!OwningASC->AbilityCommittedCallbacks.IsBoundToObject(this))
+		{
+			OwningASC->AbilityCommittedCallbacks.AddUObject(this, &UAbilityGuage::AbilityCommited);
+		}
+	}
+}
+
+void UAbilityGuage::AbilityCommited(UGameplayAbility* Ability)
+{
+	if (Ability->GetClass() == AbilityCDO->GetClass())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Ability : %s Committed"), *Ability->GetName());
 	}
 }
