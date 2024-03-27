@@ -8,9 +8,8 @@
 #include "GameplayAbilities/GA_AbilityBase.h"
 
 
-void UAbilityGuage::SetupOwingAbilitySpec(const FGameplayAbilitySpec* OwningSpec)
+void UAbilityGuage::SetupOwingAbilityCDO(const UGA_AbilityBase* OwningAbilityCDO)
 {
-	const UGA_AbilityBase* OwningAbilityCDO = Cast<UGA_AbilityBase>(OwningSpec->Ability);
 	if (OwningAbilityCDO)
 	{
 		UTexture2D* IconTexture = OwningAbilityCDO->GetIconTexture();

@@ -15,7 +15,7 @@ class UAbilityGuage : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	void SetupOwingAbilitySpec(const FGameplayAbilitySpec* OwningSpec);
+	void SetupOwingAbilityCDO(const UGA_AbilityBase* OwningAbilityCDO);
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* IconImage;

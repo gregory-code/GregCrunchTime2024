@@ -8,6 +8,7 @@
 #include "CAbilitySystemComponent.generated.h"
 
 struct FGameplayAbilitySpec;
+class UGA_AbilityBase;
 /**
  * 
  */
@@ -24,6 +25,12 @@ public:
 	void GrantInitialAbilities();
 	void ApplyFullStat();
 
+
+	TArray<const UGA_AbilityBase*> GetNoneGenericAbilityCDOs() const;
+	
+	/*
+		this may fail if ability is not replicated yet. works fine in single player.
+	*/
 	TArray<const FGameplayAbilitySpec*> GetGrantedNoneGenericAbilities() const;
 
 private:

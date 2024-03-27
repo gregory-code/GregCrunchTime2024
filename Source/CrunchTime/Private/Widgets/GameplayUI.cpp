@@ -10,6 +10,7 @@
 
 #include "GameplayAbilities/CAbilitySystemComponent.h"
 #include "GameplayAbilities/CAttributeSet.h"
+#include "GameplayAbilities/GA_AbilityBase.h"
 #include "GameplayAbilitySpec.h"
 
 #include "Widgets/AbilityGuage.h"
@@ -35,12 +36,12 @@ void UGameplayUI::NativeConstruct()
 	const UCAbilitySystemComponent* CAbilitySystemComp = Cast<UCAbilitySystemComponent>(OwnerASC);
 	if (CAbilitySystemComp)
 	{
-		TArray<const FGameplayAbilitySpec*> GrantedAbilities = CAbilitySystemComp->GetGrantedNoneGenericAbilities();
-		for (const FGameplayAbilitySpec* GrantedAbility : GrantedAbilities)
+		TArray<const UGA_AbilityBase*> GrantedAbilities = CAbilitySystemComp->GetNoneGenericAbilityCDOs();
+		for (const UGA_AbilityBase* GrantedAbility : GrantedAbilities)
 		{
 			UAbilityGuage* NewAbilityGuage = CreateWidget<UAbilityGuage>(this, AbilityGuageClass);
 			UHorizontalBoxSlot* AbilitySlot =  AbilityHBox->AddChildToHorizontalBox(NewAbilityGuage);
-			NewAbilityGuage->SetupOwingAbilitySpec(GrantedAbility);
+			NewAbilityGuage->SetupOwingAbilityCDO(GrantedAbility);
 			AbilitySlot->SetPadding(FMargin(5));
 		}
 	}
