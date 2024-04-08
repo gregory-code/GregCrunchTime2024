@@ -43,6 +43,6 @@ float UCAbilitySystemBlueprintLibrary::GetActiveAbilityManaCost(const UAbilitySy
 		CostEffect->Modifiers[0].ModifierMagnitude.AttemptCalculateMagnitude(*SpecHandle.Data.Get(), Cost);
 	}
 
-	return Cost;
+	return abs(Cost);
 }
 
