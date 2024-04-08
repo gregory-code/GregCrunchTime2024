@@ -12,5 +12,8 @@ void UAttributeGuage::UpdateValue(const FOnAttributeChangeData& ChangeData)
 void UAttributeGuage::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-	IconImage->SetBrushFromTexture(IconTexture);
+	if (IconTexture)
+	{
+		IconImage->SetBrushFromTexture(IconTexture);
+	}
 }
