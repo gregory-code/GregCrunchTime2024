@@ -83,6 +83,15 @@ private:
 	void ManaUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxManaUpdated(const FOnAttributeChangeData& ChangeData);
 
+	void ExperienceUpdated(const FOnAttributeChangeData& ChangeData);
+	void NextLevelExperienceUpdated(const FOnAttributeChangeData& ChangeData);
+	void LevelUp();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Ability")
+	TSubclassOf<UGameplayEffect> DeadRewardEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Ability")
+	TSubclassOf<UGameplayEffect> LevelUpEffect;
 
 	/*************************************************************/
 	/*                              Gameplay Cue                                   */

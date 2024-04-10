@@ -42,6 +42,8 @@ ACCharacterBase::ACCharacterBase()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &ACCharacterBase::MaxHealthUpdated);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetManaAttribute()).AddUObject(this, &ACCharacterBase::ManaUpdated);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxManaAttribute()).AddUObject(this, &ACCharacterBase::MaxManaUpdated);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetExperienceAttribute()).AddUObject(this, &ACCharacterBase::ExperienceUpdated);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetNextLevelExperienceAttribute()).AddUObject(this, &ACCharacterBase::NextLevelExperienceUpdated);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetDeadTag()).AddUObject(this, &ACCharacterBase::DeathTagChanged);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetAimingTag()).AddUObject(this, &ACCharacterBase::AimingTagChanged);
 	AbilitySystemComponent->RegisterGameplayTagEvent(UCAbilityGenericTags::GetStunedTag()).AddUObject(this, &ACCharacterBase::StunTagChanged);
@@ -206,6 +208,15 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 	if (ChangeData.NewValue <= 0)
 	{
 		StartDeath();
+		if (HasAuthority())
+		{
+			UAbilitySystemComponent* KillerASC = ChangeData.GEModData->EffectSpec.GetContext().GetInstigatorAbilitySystemComponent();
+			if (KillerASC)
+			{
+				FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DeadRewardEffect, 1, GetAbilitySystemComponent()->MakeEffectContext());
+				KillerASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
 	}
 }
 
@@ -236,6 +247,34 @@ void ACCharacterBase::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if (StatusGuage)
 		StatusGuage->SetMana(AttributeSet->GetMana(), ChangeData.NewValue);
+}
+
+void ACCharacterBase::ExperienceUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (HasAuthority())
+	{
+		if (ChangeData.NewValue >= AttributeSet->GetNextLevelExperience())
+		{
+			LevelUp();
+		}
+	}
+}
+
+void ACCharacterBase::NextLevelExperienceUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (HasAuthority())
+	{
+		if (ChangeData.NewValue <= AttributeSet->GetExperience())
+		{
+			LevelUp();
+		}
+	}
+}
+
+void ACCharacterBase::LevelUp()
+{
+		FGameplayEffectSpecHandle Spec = GetAbilitySystemComponent()->MakeOutgoingSpec(LevelUpEffect, 1, GetAbilitySystemComponent()->MakeEffectContext());
+		GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*Spec.Data.Get());
 }
 
 void ACCharacterBase::StartStunAnim()
