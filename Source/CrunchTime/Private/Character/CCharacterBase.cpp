@@ -208,7 +208,7 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 	if (ChangeData.NewValue <= 0)
 	{
 		StartDeath();
-		if (HasAuthority())
+		if (HasAuthority() && ChangeData.GEModData)
 		{
 			UAbilitySystemComponent* KillerASC = ChangeData.GEModData->EffectSpec.GetContext().GetInstigatorAbilitySystemComponent();
 			if (KillerASC)
@@ -251,6 +251,7 @@ void ACCharacterBase::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 
 void ACCharacterBase::ExperienceUpdated(const FOnAttributeChangeData& ChangeData)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Experience is now: %f"), ChangeData.NewValue);
 	if (HasAuthority())
 	{
 		if (ChangeData.NewValue >= AttributeSet->GetNextLevelExperience())
@@ -262,6 +263,7 @@ void ACCharacterBase::ExperienceUpdated(const FOnAttributeChangeData& ChangeData
 
 void ACCharacterBase::NextLevelExperienceUpdated(const FOnAttributeChangeData& ChangeData)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Next Level Experience is now: %f"), ChangeData.NewValue);
 	if (HasAuthority())
 	{
 		if (ChangeData.NewValue <= AttributeSet->GetExperience())
